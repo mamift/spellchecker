@@ -19,11 +19,17 @@ Route::get('/', function()
     Debugbar::info($allClasses);
     Debugbar::info($allNamespaces);
 
-	return View::make('hello');
+    $bean = R::dispense('test');
+    $bean->title =  "this is a test";
+
+	return View::make('hello')->with(array('test_bean' => $bean));
 });
 
 Route::get('/test', function() {
     return app_path();
+});
+Route::get('/cwd', function() {
+    return getcwd();
 });
 
 Route::get('/phpinfo', function() {
@@ -35,3 +41,33 @@ Route::get('/nukedb', function() {
 
     return 'Database nuked';
 });
+
+Route::group(array('prefix' => 'v1'), function() {
+    require('SpellCheckAPI_routes.php');
+    // require('WordsAPI_routes.php');
+
+    /**
+     * Returns a new token for CSRF (cross-site request forgery) validation for PUT,PATCH,POST requests
+     */
+    Route::get('/session', "HomeController@session");
+
+    /**
+     * Generic error message
+     */
+    Route::any('{any}', function() {
+        return r404_json(array(
+            'success' => 'false',
+            'message' => GENERIC_404
+        ));
+    })->where('any', '(.*)');
+});
+
+/**
+ * Generic catch all route for unknown routes; MUST always be LAST
+ */
+Route::any('{any}', function() {
+    return r404_json(array(
+        'success' => 'false',
+        'message' => GENERIC_404
+    ));
+})->where('any', '(.*)');
