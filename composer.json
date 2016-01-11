@@ -13,6 +13,7 @@
 	"autoload": {
 		"classmap": [
 			"app/commands",
+			"app/classes",
 			"app/controllers",
 			"app/models",
 			"app/database/migrations",
@@ -21,11 +22,7 @@
 		],
 		"files": [
             "app/constants.php",
-            "app/helpers.php",
-            "app/classes/APIKeyVerificationFilter.php",
-            "app/classes/SpellCheckCommand.php",
-            "app/classes/SerialiseDictionary.php",
-            "app/classes/SpellCheckWord.php"
+            "app/helpers.php"
         ]
 	},
 	"scripts": {
