@@ -7,7 +7,7 @@
 		"laravel/framework": "4.1.*",
 		"passwordlib/passwordlib": "*@dev",
 		"robclancy/laravel4-hashing": "1.0.x",
-		"mamift/redbean4-laravel4":"dev-master",
+		"mamift/redbean4-laravel4":"dev-php533",
 		"barryvdh/laravel-debugbar":"~1.8"
 	},
 	"autoload": {
