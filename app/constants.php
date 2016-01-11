@@ -18,15 +18,16 @@ define('GENERIC_INCOMPLETE',        'API not live; incomplete implementation.');
 define('GENERIC_NOID',              'Must provide ID.');
 define('GENERIC_INVALIDID',         'Invalid ID.');
 define('GENERIC_NOCONTENT',         'There is no body content in the request.');
+define('GENERIC_CHLIMEXCEEDED',     'Character limit exceeded!');
 define('DICTIONARY_SERIALISED',     'Dictionary has been serialised.');
 define('INVALID_CSRF_TOKEN',        'Invalid CSRF token.');
 define('INVALID_APIKEY',            'Invalid API key.');
 
 define('DATABASE_ERROR',            'Some obscene database error occurred. Abandon ship!');
 
-define('DELEGATION_ERROR_NOCLASS',  'Delegation class does not exist!');
-define('DELEGATION_ERROR_NOMETHOD', 'Method on the delegated class does not exist.');
-define('DELEGATION_ERROR_METHODER', 'Method on the delegated class failed to execute.');
+define('DELEGATION_ERROR_NOCLASS',  'Class does not exist!');
+define('DELEGATION_ERROR_NOMETHOD', 'Method on the speicified class does not exist.');
+define('DELEGATION_ERROR_METHODER', 'Method on the speicified class failed to execute.');
 define('DELEGATION_NOT_A_COMMAND',  'Specified class is not of the App\\Commands\\ namespace.');
 
 define('TBL_APIKEYS',               'apikeys');
