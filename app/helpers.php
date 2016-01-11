@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 if (!function_exists('r200_json')) {
     /**
@@ -7,7 +7,7 @@ if (!function_exists('r200_json')) {
      * @return [JSON]       [JSON array]
      */
     function r200_json($data) {
-        return Response::json($data, 200, array(), JSON_UNESCAPED_SLASHES);
+        return Response::json($data, 200, array(), JSON_NUMERIC_CHECK);
     }
 }
 
@@ -18,7 +18,7 @@ if (!function_exists('r201_json')) {
      * @return [JSON]       [JSON array]
      */
     function r201_json($data) {
-        return Response::json($data, 201, array(), JSON_UNESCAPED_SLASHES);
+        return Response::json($data, 201, array(), JSON_NUMERIC_CHECK);
     }
 }
 
@@ -29,7 +29,7 @@ if (!function_exists('r404_json')) {
      * @return [JSON]       [JSON array]
      */
     function r404_json($data) {
-        return Response::json($data, 404, array(), JSON_UNESCAPED_SLASHES);
+        return Response::json($data, 404, array(), JSON_NUMERIC_CHECK);
     }
 }
 
@@ -40,7 +40,7 @@ if (!function_exists('r403_json')) {
      * @return [JSON]       [JSON array]
      */
     function r403_json($data) {
-        return Response::json($data, 403, array(), JSON_UNESCAPED_SLASHES);
+        return Response::json($data, 403, array(), JSON_NUMERIC_CHECK);
     }
 }
 
@@ -51,7 +51,7 @@ if (!function_exists('r401_json')) {
      * @return [JSON]       [JSON array]
      */
     function r401_json($data) {
-        return Response::json($data, 401, array(), JSON_UNESCAPED_SLASHES);
+        return Response::json($data, 401, array(), JSON_NUMERIC_CHECK);
     }
 }
 
@@ -63,7 +63,7 @@ if (!function_exists('rb_r200_json')) {
      */
     function rb_r200_json($redbeanData) {
         $response = R::exportAll($redbeanData);
-        return Response::json($response, 200, array(), JSON_UNESCAPED_SLASHES);
+        return Response::json($response, 200, array(), JSON_NUMERIC_CHECK);
     }
 }
 
@@ -75,7 +75,7 @@ if (!function_exists('rb_r404_json')) {
      */
     function rb_r404_json($redbeanData) {
         $response = R::exportAll($redbeanData);
-        return Response::json($response, 404, array(), JSON_UNESCAPED_SLASHES);
+        return Response::json($response, 404, array(), JSON_NUMERIC_CHECK);
     }
 }
 
@@ -97,7 +97,7 @@ if (!function_exists('r501_json')) {
      * @return [JSON]       [JSON array]
      */
     function r501_json($data) {
-        return Response::json($data, 501, array(), JSON_UNESCAPED_SLASHES);
+        return Response::json($data, 501, array(), JSON_NUMERIC_CHECK);
     }
 }
 
@@ -137,7 +137,7 @@ if (!function_exists('get_namespaces')) {
                 }
             }
         }
-        return $namespaces; 
+        return $namespaces;
     }
 }
 
@@ -195,28 +195,48 @@ if (!function_exists('results')) {
 if (!function_exists('exec_command')) {
     /**
      * Executes a command
-     * @return [type] [description]
+     * Can be invoked in either of two ways: exec_command('SpellCheckWord', $word);
+     * The name of the class as a string plus constructor arguments,
+     * Or: exec_command(new SpellCheckWord($word));
+     * A new instance of the command class you wish to execute
+     * 
+     * @return [Results object] [the results of the command]
      */
-    function exec_command($command_class_name, $constructor_arguments = NULL) {
-        if (class_exists($command_class_name)) {
-            $command = new $command_class_name($constructor_arguments);
-            $command_results = NULL;
+    function exec_command($command_class, $constructor_arguments = NULL) {
 
-            if (method_exists($command, 'handle')) {
-                $command_results = $command->handle();
+        $command_results = NULL;
 
-                if (method_exists($command_results, 'all')) {
+        $sm_sub_attempt_exec = function($com) use (&$command_results) {
+            if (method_exists($com, 'handle')) {
+                $command_results = $com->handle();
+
+                // if the command returns a Results object, then just return the object
+                if ($command_results instanceof Results && method_exists($command_results, 'all')) {
                     return $command_results;
-                } else {
-                    return results($command_results, true);
+                } else { // otherwise, return the command_results inside a new Results object
+                    return $command_results = results($command_results, true);
                 }
-
             } else {
                 $command_results = results('DELEGATION_ERROR_METHODER', false, DELEGATION_ERROR_METHODER);
             }
+        };
 
-        } else {
-            return results('DELEGATION_ERROR_NOCLASS', false, DELEGATION_ERROR_NOCLASS);
+        if (is_object($command_class)) {
+
+            $sm_sub_attempt_exec($command_class);
+
+        } else if (is_string($command_class)) {
+
+            if (class_exists($command_class)) {
+                $command = new $command_class($constructor_arguments);
+
+                $sm_sub_attempt_exec($command);
+
+            } else {
+                return results('DELEGATION_ERROR_NOCLASS', false, DELEGATION_ERROR_NOCLASS);
+            }
         }
+
+        return $command_results;
     }
 }
