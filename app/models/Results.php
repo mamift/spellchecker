@@ -155,9 +155,11 @@ class Results {
     public function all() 
     {
         $response = array();
-        if (!empty($this->data())) $response['data'] = $this->data();
+        $_data = $this->data();
+        if (!empty($_data)) $response['data'] = $this->data();
         $response['success'] = $this->success();
-        if (!empty($this->message())) $response['message'] = $this->message();
+        $_message = $this->message();
+        if (!empty($_message)) $response['message'] = $this->message();
         // also retrieve custom data
         foreach ($this->customData as $key => $value) {
             $response[$key] = $value;
