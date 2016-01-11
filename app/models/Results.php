@@ -125,7 +125,7 @@ class Results {
 
     /**
      * Invokes array_keys() on $this->data and saves the result in $this->filteredData;
-     *      *
+     *
      * @param [array] $filter [the data filter]
      * 
      */
@@ -157,8 +157,10 @@ class Results {
         $response = array();
         $_data = $this->data();
         if (!empty($_data)) $response['data'] = $this->data();
+        
         $response['success'] = $this->success();
         $_message = $this->message();
+        
         if (!empty($_message)) $response['message'] = $this->message();
         // also retrieve custom data
         foreach ($this->customData as $key => $value) {

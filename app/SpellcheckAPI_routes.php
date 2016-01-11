@@ -1,13 +1,13 @@
 <?php
 
-Route::group(['prefix' => 'spellcheck'], function() {
+Route::group(array('prefix' => 'spellcheck'), function() {
     /**
      * server_url/words
      */
     Route::get('/', function() {
-        return r200_json([
+        return r200_json(array(
             'message' => GENERIC_HELP
-        ]);
+        ));
     });
 
     /**

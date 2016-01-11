@@ -35,7 +35,7 @@ and the original can be found in http:// www.phpclasses.org/package/4859-PHP-Sug
 /**
  * This is a base class used by specialised commands (SpellCheckWord, SerialiseDictionary for instance)
  */
-abstract class SpellCheckCommand
+abstract class SpellCheckCommand extends Command
 {
     protected $NWORDS;
     protected $file;
@@ -48,10 +48,8 @@ abstract class SpellCheckCommand
      */
     public function __construct()
     {
-        $this->file = app_path() . DIRECTORY_SEPARATOR . 'database'. DIRECTORY_SEPARATOR .'serialised_dictionary.txt';
-        // $this->file = '..'. DIRECTORY_SEPARATOR .'database'. DIRECTORY_SEPARATOR .'serialised_dictionary.txt';
-        $this->wordFile = app_path() . DIRECTORY_SEPARATOR . 'database'. DIRECTORY_SEPARATOR .'words.txt';
-        // $this->wordFile = '..'. DIRECTORY_SEPARATOR .'database'. DIRECTORY_SEPARATOR .'words.txt';
+        $this->file = app_path() . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'serialised_dictionary.txt';
+        $this->wordFile = app_path() . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'words.txt';
 
         if (!file_exists($this->file)) {
             $this->serialiseDictionary();
@@ -68,7 +66,7 @@ abstract class SpellCheckCommand
      */
     protected function words($text) 
     {
-        $matches = [];
+        $matches = array();
         preg_match_all("/[a-z]+/", strtolower($text), $matches);
         return $matches[0];
     }
@@ -105,7 +103,7 @@ abstract class SpellCheckCommand
         $alphabet = 'abcdefghijklmnopqrstuvwxyz';
         $alphabet = str_split($alphabet);
         $n = strlen($word);
-        $edits = [];
+        $edits = array();
         for ($i = 0 ; $i < $n; $i++) {
             $edits[] = substr($word, 0, $i) . substr($word, $i + 1); // deleting one char
             foreach ($alphabet as $c) {
@@ -133,7 +131,7 @@ abstract class SpellCheckCommand
      */
     protected function knownEdits2($word) 
     {
-        $known = [];
+        $known = array();
         foreach ($this->edits1($word) as $e1) {
             foreach ($this->edits1($e1) as $e2) {
                 if (array_key_exists($e2, $this->NWORDS)) 
@@ -152,7 +150,7 @@ abstract class SpellCheckCommand
      */
     protected function known(array $words) 
     {
-        $known = [];
+        $known = array();
         foreach ($words as $w) {
             if (array_key_exists($w, $this->NWORDS)) {
                 $known[] = $w;
@@ -220,10 +218,10 @@ abstract class SpellCheckCommand
             }
         }
 
-        $candidates = []; 
+        $candidates = array(); 
 
         if ($this->known(array($word))) {
-            return [$word];
+            return array($word);
         } elseif (($tmp_candidates = $this->known($this->edits1($word)))) {
             foreach ($tmp_candidates as $candidate) {
                 $candidates[] = $candidate;
@@ -233,7 +231,7 @@ abstract class SpellCheckCommand
                 $candidates[] = $candidate;
             }
         } else {
-            return [$word];
+            return array($word);
         }
 
         $max = 0;
