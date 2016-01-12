@@ -214,7 +214,13 @@ if (!function_exists('exec_command')) {
                 if ($command_results instanceof Results && method_exists($command_results, 'all')) {
                     return $command_results;
                 } else { // otherwise, return the command_results inside a new Results object
-                    return $command_results = results($command_results, true);
+                    $command_results = results($command_results, true);
+
+                    if (property_exists($com, 'message')) {
+                        $command_results->message = $com->message;
+                    }
+
+                    return $command_results;
                 }
             } else {
                 $command_results = results('DELEGATION_ERROR_METHODER', false, DELEGATION_ERROR_METHODER);
