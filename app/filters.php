@@ -13,10 +13,9 @@
 
 App::before(function($request)
 {
-    if (Request::isMethod('post') || Request::isMethod('patch') || Request::isMethod('PUT')) {
+    if (Request::isMethod('post') || Request::isMethod('patch') || Request::isMethod('put')) {
         Route::when('api/v1/*', 'csrf');
     }
-
 
     Route::when('api/v1/*', 'apikeyverification');
 });

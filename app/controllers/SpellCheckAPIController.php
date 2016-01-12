@@ -20,15 +20,18 @@ class SpellCheckAPIController extends BaseController {
      * Spellchecks an entire string of words. Maximum limit of 16384 characters
      * 
      * @param  [string] $text [the text to spellcheck]
-     * @return [string]       [the corrected text]
+     * @return [array]       [an array containing the words that were known and unknown - for unknown words, a candidate 
+     * list is also provided for each unknown word; for unknown words that had no suggested corrections, then they are 
+     * sent in a separate array]
      */
-    public function correctText(Request $request) 
+    public function correctText() 
     {
-        $text = $request->get('text');
+        $input = Input::all();
+        $text = Input::get('text');
 
         if (count($text) > 16384) return results(16384, false, GENERIC_CHLIMEXCEEDED);
 
-        $response = exec_command();
+        $response = exec_command(new SpellCheckText($text));
 
         return $response->all();
     }
