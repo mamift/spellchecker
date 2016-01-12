@@ -33,6 +33,7 @@ Route::get('/cwd', function() {
 });
 
 Route::get('/phpinfo', function() {
+    Debugbar::disable();
     phpinfo();
 });
 

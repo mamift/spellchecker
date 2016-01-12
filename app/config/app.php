@@ -123,7 +123,7 @@ return array(
 
 		'Barryvdh\Debugbar\ServiceProvider',
 		'Mamift\Redbean4Laravel4\Redbean4Laravel4ServiceProvider',
-
+		'Dark\SmartyView\SmartyViewServiceProvider'
 	),
 
 	/*
