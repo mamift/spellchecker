@@ -203,6 +203,8 @@ abstract class SpellCheckCommand extends Command
      */
     protected function correct($word) 
     {
+        if (!is_string($word)) return false;
+
         $word = trim($word);
         if (empty($word)) return false;
         
