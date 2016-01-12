@@ -22,7 +22,7 @@ Route::get('/', function()
     $bean = R::dispense('test');
     $bean->title =  "this is a test";
 
-	return View::make('hello')->with(array('test_bean' => $bean));
+	return View::make('index')->with(array('test_bean' => $bean));
 });
 
 Route::get('/test', function() {
