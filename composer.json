@@ -22,7 +22,8 @@
 		],
 		"files": [
             "app/constants.php",
-            "app/helpers.php"
+            "app/helpers.php",
+            "app/database/redbean_extensions.php"
         ]
 	},
 	"scripts": {
