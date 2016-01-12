@@ -13,7 +13,12 @@
 
 App::before(function($request)
 {
-	//
+    if (Request::isMethod('post') || Request::isMethod('patch') || Request::isMethod('PUT')) {
+        Route::when('api/v1/*', 'csrf');
+    }
+
+
+    Route::when('api/v1/*', 'apikeyverification');
 });
 
 
@@ -71,10 +76,6 @@ Route::filter('guest', function()
 |
 */
 
-Route::filter('csrf', function()
-{
-	if (Session::token() != Input::get('_token'))
-	{
-		throw new Illuminate\Session\TokenMismatchException;
-	}
-});
+Route::filter('csrf', 'CSRFVerificationFilter');
+
+Route::filter('apikeyverification', 'APIKeyVerificationFilter');
