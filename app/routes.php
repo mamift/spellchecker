@@ -42,14 +42,23 @@ Route::get('/nukedb', function() {
     return 'Database nuked';
 });
 
-Route::group(array('prefix' => 'v1'), function() {
+Route::get('/class_exists/{name}', function($name) {
+    return array('class_name' => $name, 'exists?' => class_exists($name));
+});
+
+Route::get('/get_classes', function() {
+    return get_declared_classes();
+});
+
+
+Route::group(array('prefix' => 'api/v1'), function() {
     require('SpellCheckAPI_routes.php');
     // require('WordsAPI_routes.php');
 
     /**
      * Returns a new token for CSRF (cross-site request forgery) validation for PUT,PATCH,POST requests
      */
-    Route::get('/session', "HomeController@session");
+    Route::get('/session', "HomeController@getSessionToken");
 
     /**
      * Generic error message
