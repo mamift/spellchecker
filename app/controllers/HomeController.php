@@ -20,4 +20,12 @@ class HomeController extends BaseController {
 		return View::make('hello');
 	}
 
+	/**
+	 * Returns a CSRF session token for POST, PUT, and PATCH requests
+	 */
+	public function getSessionToken()
+	{
+		return r200_json(results(Session::token(), true, null)->all());
+	}
+
 }
