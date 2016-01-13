@@ -251,17 +251,16 @@ if (!function_exists('exec_command')) {
             if (method_exists($com, 'handle')) {
                 $command_results = $com->handle();
 
-                // if the command returns a Results object, then just return the object
+                // if the command returns a Results object, then just exit the closure
                 if ($command_results instanceof Results && method_exists($command_results, 'all')) {
-                    return $command_results;
+                    return;
                 } else { // otherwise, return the command_results inside a new Results object
                     $command_results = results($command_results, true);
 
+                    // if the command object has a public message property, lets pass that onto the results object
                     if (property_exists($com, 'message')) {
                         $command_results->message = $com->message;
                     }
-
-                    return $command_results;
                 }
             } else {
                 $command_results = results('DELEGATION_ERROR_METHODER', false, DELEGATION_ERROR_METHODER);
