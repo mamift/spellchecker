@@ -74,6 +74,7 @@ class SpellCheckText extends SpellCheckCommand
 
     /**
      * Build a list of possible candidate corrections for each unknown word
+     * Also list the words with no candidate (suggested) corrections
      */
     private function buildCandidateWordsForUnknownWords()
     {
