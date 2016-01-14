@@ -240,7 +240,9 @@ if (!function_exists('exec_command')) {
      * The name of the class as a string plus constructor arguments,
      * Or: exec_command(new SpellCheckWord($word));
      * A new instance of the command class you wish to execute
-     * 
+     *
+     * @param [Object] $command_class [the command to execute]
+     * @param [mixed] $constructor_arguments [any arguments to pass to the constructor if invoking a command by its class name]
      * @return [Results object] [the results of the command]
      */
     function exec_command($command_class, $constructor_arguments = NULL) {
@@ -284,5 +286,29 @@ if (!function_exists('exec_command')) {
         }
 
         return $command_results;
+    }
+}
+
+if (!function_exists('exec_delegate')) {
+
+    /**
+     * Similar in concept to exec_command, but only accepts class names and method names (as strings).
+     * Can be used for late runtime execution of helper classes (they don't have to be commands).
+     * All delegated methods must be public, obviously.
+     * 
+     * @param  [class object] $delegate_class [object]
+     */
+    function exec_delegate($delegate_class, $delegate_method) {
+
+        if (class_exists($delegate_class)) {
+
+            if (method_exists($delegate_class, $delegate_method)) {
+                return (new $delegate_class)->$delegate_method();
+            } else {
+                return results('DELEGATION_ERROR_NOMETHOD', false, DELEGATION_ERROR_NOMETHOD);
+            }
+        } else {
+            return results('DELEGATION_ERROR_NOCLASS', false, DELEGATION_ERROR_NOCLASS);
+        }
     }
 }
