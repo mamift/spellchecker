@@ -13,11 +13,13 @@
 
 App::before(function($request)
 {
-    if (Request::isMethod('post') || Request::isMethod('patch') || Request::isMethod('put')) {
-        Route::when('api/v1/*', 'csrf');
-    }
+    $exemptRoutes = Request::is('api/v1/preflight_handshake');
 
-    Route::when('api/v1/*', 'apikeyverification');
+    // if not an exempt route, apply filters
+    if (!$exemptRoutes) {
+        Route::when('api/v1/*', 'csrf');
+        Route::when('api/v1/*', 'apikeyverification');
+    }
 });
 
 

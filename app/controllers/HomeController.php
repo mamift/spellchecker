@@ -28,4 +28,43 @@ class HomeController extends BaseController {
 		return r200_json(results(Session::token(), true, null)->all());
 	}
 
+	/**
+	 * Preflight handshake to grant access to any client that might wish to use the 
+	 * SpellCheckAPI. The preflight handshake request from the client must first 
+	 * satisfy two conditions: valid apikey and valid referral URL. 
+	 * When they are satisfed a CSRF token is returned  to the client, and this 
+	 * token must be included in every subsequent request for the session. When I 
+	 * say 'subsequent request', I mean requests of all types, from GET, POST, PUT, 
+	 * PATCH etc. Well only GET and POST are used anyway...
+	 *
+	 * Also, the route that invokes this method is also the only route that is exempt 
+	 * from CSRF and API key validation, as such we invoke the CSRFVerificationFilter 
+	 * class as a delegate to handle verification of authorised origin referral domains. 
+	 * If no referral URL is provided, then the handshake fails. 
+	 * 
+	 * Moreover, because the referral URL can be spoofed, the preflight handshake must be 
+	 * accompanied by a valid API key. If no API key is present the request also fails. 
+	 *
+	 * NOTE: PHP sessions timeout after 24 mins of no communication. If that happens a new
+	 * preflight handshake must occur to gain access to the SpellChecker API.
+	 * 
+	 * @return [type] [description]
+	 */
+	public function preflightHandshake()
+	{
+		$clientIP = get_ip_address();
+		$clientReferralOK = exec_delegate('CSRFVerificationFilter', 'verifyOriginReferral');
+		$apikeyOK = exec_delegate('APIKeyVerificationFilter', 'verifyAPIKey');
+
+		// return r401_json(results(array($_SERVER, $clientReferralOK, $apikeyOK), true, AUTHORISED_REFERRAL_FQDN)->all());
+
+		if (!$clientReferralOK || !$apikeyOK) { // fail
+			return r401_json(results('INVALID_PREFLIGHT', false, INVALID_PREFLIGHT)->all());
+		}
+
+		$csrfToken = Session::token();
+		$response = results($csrfToken, true, null);
+		
+		return r200_json($response->all());
+	}
 }

@@ -22,6 +22,8 @@ define('GENERIC_CHLIMEXCEEDED',     'Character limit exceeded!');
 define('DICTIONARY_SERIALISED',     'Dictionary has been serialised.');
 define('INVALID_CSRF_TOKEN',        'Invalid CSRF token.');
 define('INVALID_APIKEY',            'Invalid API key.');
+define('INVALID_REQUEST',           'Invalid request.');
+define('INVALID_PREFLIGHT',         'Invalid preflight request.');
 
 define('DATABASE_ERROR',            'Some obscene database error occurred. Abandon ship!');
 
@@ -36,8 +38,12 @@ define('TBL_WORDS',                 'words');
 define('TBL_DICTIONARYENUM',        'dictionaries');
 define('TBL_USERS',                 'users');
 define('TBL_PASSWORDRESETS',        'passwordresets');
+define('TBL_SCSESSIONS',            'spellchecksessions');
 
 define('DEFAULT_DATETIMEFORMAT',    "Y-m-d H:i:s");
+
+define('AUTHORISED_REFERRAL_FQDN',  'survey6.spss-asp.com');
+define('AUTHORISED_REFERRAL_SLDN',  'spss-asp.com');
 
 /*
  * @var the relative path to the words.txt file (to be used to fill the database)

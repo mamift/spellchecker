@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('/', function() {
+    return r200_json(results(null, true, null)->all());
+});
+
 /**
  * Testing and development routes; remove in production push
  */
