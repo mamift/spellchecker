@@ -13,9 +13,9 @@ class CSRFVerificationFilter {
         } else {
 
             if ($this->verifyOriginReferral()) {
-                return;
+                return true;
             } else {
-                r403_json(results('INVALID_PREFLIGHT', false, INVALID_PREFLIGHT)->all());
+                return r403_json(results('INVALID_PREFLIGHT', false, INVALID_PREFLIGHT)->all());
             }
         }
 
@@ -27,16 +27,14 @@ class CSRFVerificationFilter {
      */
     public function verifyOriginReferral()
     {
-        if (empty($_SERVER['HTTP_REFERRER']) || !isset($_SERVER['HTTP_REFERRER'])) return false;
+        if (empty($_SERVER['HTTP_REFERER']) || !isset($_SERVER['HTTP_REFERER'])) return false;
 
-        $referrer = $_SERVER['HTTP_REFERRER'];
-        $authDomainInReferrer = strstr($referrer, AUTHORISED_REFERRAL_FQDN);
-
-        if (!is_string($authDomainInReferrer)) return false;
+        $referrer = $_SERVER['HTTP_REFERER'];
 
         // note this method returns a boolean
-        $exactOrPartialMatch = get_partial_string_match($authDomainInReferrer, AUTHORISED_REFERRAL_FQDN);
+        $isReferrerAuth = is_substr_in_string($referrer, AUTHORISED_REFERRAL_FQDN);
 
-        return $exactOrPartialMatch; // if true, then OK to proceed!
+        // return ($isReferrerAuth || is_substr_in_string('http://localhost', 'localhost')); // if true, then OK to proceed!
+        return ($isReferrerAuth); // if true, then OK to proceed!
     }
 }

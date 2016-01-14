@@ -314,21 +314,29 @@ if (!function_exists('exec_delegate')) {
     }
 }
 
-if (!function_exists('get_partial_string_match')) {
+if (!function_exists('is_substr_in_string')) {
 
     /**
      * Gets a partial match of two strings
      * 
-     * @param  [string] $str1 [string 1]
-     * @param  [string] $str2 [string 2]
+     * @param  [string] $haystack [haystack, string 1]
+     * @param  [string] $needle [needle, string 2]
      * @param  [int] $covariance [the variance of letters that each string can vary by in the comparison]
      * @return [bool]       [true if exact or partial, false if not]
      */
-    function get_partial_string_match($str1, $str2, $covariance = 2) {
-        $comparison = strcmp($str1, $str2);
-        $exactMatchOfStrings = $comparison == 0;
-        $partialMatchOfStrings = ($comparison > 0 && $comparison < $covariance) || ($comparison < 0 && $comparison > (0 - $covariance));
+    function is_substr_in_string($haystack, $needle, $covariance = 2, &$debug = NULL) {
+        $pos = strpos($haystack, $needle);
+        $length = strlen($needle);
 
-        return ($exactMatchOfStrings || $partialMatchOfStrings);
+        if ($pos === false) return false;
+
+        $substr = substr($haystack, $pos, $length);
+
+        if (empty($substr)) return false;
+
+        $comparison = strcmp($substr, $needle);
+        $exactMatchOfStrings = $comparison == 0;
+
+        return ($comparison == 0);
     }
 }
