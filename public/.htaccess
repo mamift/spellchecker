@@ -1,6 +1,11 @@
 
 php_flag display_errors 1
 
+<IfModule mod_headers.c>
+   Header always set Access-Control-Allow-Origin "*"
+   Header always set Access-Control-Allow-Methods "POST, GET, OPTIONS, DELETE, PUT, PATCH"
+</IfModule>
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews
