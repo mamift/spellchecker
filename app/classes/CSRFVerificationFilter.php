@@ -32,16 +32,12 @@ class CSRFVerificationFilter {
         $referrer = $_SERVER['HTTP_REFERRER'];
         $authDomainInReferrer = strstr($referrer, AUTHORISED_REFERRAL_FQDN);
 
-        if (is_string($authDomainInReferrer)) {
-            $comparisonVariance = 2;
-            $comparison = strcmp($authDomainInReferrer, AUTHORISED_REFERRAL_FQDN);
-            $exactMatchOfAuthReferralDomain = $comparison == 0;
-            $partialMatchOfAuthReferralDomain =  (($comparison > 0) && ($comparison < $comparisonVariance)) || (($comparison < 0) && ($comparison > (0 - $comparisonVariance)));
+        if (!is_string($authDomainInReferrer)) return false;
 
-            if ($exactMatchOfAuthReferralDomain || $partialMatchOfAuthReferralDomain) return true; // OK to proceed!
-            else {
-                return false;
-            }
-        }
+        $comparisonVariance = 2;
+        $comparison = strcmp($authDomainInReferrer, AUTHORISED_REFERRAL_FQDN);
+        $exactMatchOfAuthReferralDomain = $comparison == 0;
+        $partialMatchOfAuthReferralDomain =  (($comparison > 0) && ($comparison < $comparisonVariance)) || (($comparison < 0) && ($comparison > (0 - $comparisonVariance)));
+
+        return ($exactMatchOfAuthReferralDomain || $partialMatchOfAuthReferralDomain) // if true, then OK to proceed!
     }
-}
