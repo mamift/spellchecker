@@ -34,10 +34,9 @@ class CSRFVerificationFilter {
 
         if (!is_string($authDomainInReferrer)) return false;
 
-        $comparisonVariance = 2;
-        $comparison = strcmp($authDomainInReferrer, AUTHORISED_REFERRAL_FQDN);
-        $exactMatchOfAuthReferralDomain = $comparison == 0;
-        $partialMatchOfAuthReferralDomain =  (($comparison > 0) && ($comparison < $comparisonVariance)) || (($comparison < 0) && ($comparison > (0 - $comparisonVariance)));
+        // note this method returns a boolean
+        $exactOrPartialMatch = get_partial_string_match($authDomainInReferrer, AUTHORISED_REFERRAL_FQDN);
 
-        return ($exactMatchOfAuthReferralDomain || $partialMatchOfAuthReferralDomain) // if true, then OK to proceed!
+        return $exactOrPartialMatch; // if true, then OK to proceed!
     }
+}

@@ -303,12 +303,32 @@ if (!function_exists('exec_delegate')) {
         if (class_exists($delegate_class)) {
 
             if (method_exists($delegate_class, $delegate_method)) {
-                return (new $delegate_class)->$delegate_method();
+                $delegatee = new $delegate_class;
+                return $delegatee->$delegate_method();
             } else {
                 return results('DELEGATION_ERROR_NOMETHOD', false, DELEGATION_ERROR_NOMETHOD);
             }
         } else {
             return results('DELEGATION_ERROR_NOCLASS', false, DELEGATION_ERROR_NOCLASS);
         }
+    }
+}
+
+if (!function_exists('get_partial_string_match')) {
+
+    /**
+     * Gets a partial match of two strings
+     * 
+     * @param  [string] $str1 [string 1]
+     * @param  [string] $str2 [string 2]
+     * @param  [int] $covariance [the variance of letters that each string can vary by in the comparison]
+     * @return [bool]       [true if exact or partial, false if not]
+     */
+    function get_partial_string_match($str1, $str2, $covariance = 2) {
+        $comparison = strcmp($str1, $str2);
+        $exactMatchOfStrings = $comparison == 0;
+        $partialMatchOfStrings = ($comparison > 0 && $comparison < $covariance) || ($comparison < 0 && $comparison > (0 - $covariance));
+
+        return ($exactMatchOfStrings || $partialMatchOfStrings);
     }
 }
