@@ -8,7 +8,7 @@ class APIKeyVerificationFilter {
 
         if (R::isAPIKeyValid($apikey)) return;
         else {
-            return r401_json(results(null, false, INVALID_APIKEY)->all());
+            return r401_json(results('INVALID_APIKEY', false, INVALID_APIKEY)->all());
         }
     }
 }
