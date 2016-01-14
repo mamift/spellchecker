@@ -62,3 +62,23 @@ Route::get('/test/1', function() {
         return 'not a string';
     }
 });
+
+Route::get('/test/2', function() {
+    return r200_json(array('is_substr_in_string' => is_substr_in_string('http://localhost', 'localhost')));
+    // return r200_json(array('is_string_in_haystack' => strstr('http://localhost', 'localhost')));
+});
+
+Route::get('/test/3', function() {
+    $pos = strpos('http://localhost:15230/', 'localhost');
+    $len = strlen('localhost');
+    $substr = substr('http://localhost:15230/', $pos, $len);
+
+    return r200_json(array(
+        'strpos' => strpos('http://localhost:15230/', 'localhost'),
+        'length' => strlen('localhost'),
+        'substr' => substr('http://localhost:15230/', $pos, $len),
+        'substr_in_string' => strcmp($substr, 'localhost'),
+        'is_substr_in_string' => is_substr_in_string('http://localhost', 'localhost')
+    ));
+    // return r200_json(array('is_string_in_haystack' => strstr('http://localhost', 'localhost')));
+});
