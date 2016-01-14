@@ -16,7 +16,9 @@ class APIKeyVerificationFilter {
 
     /**
      * Verifies if an API key in the request header is valid; 
-     * it's basically a wrapper for a R:: extension function
+     * it's basically a wrapper for a R:: extension function.
+     *
+     * This is in it's own method so it can be delegated if need be.
      * 
      * @return [bool] [true if the API key is valid, false otherwise]
      */
