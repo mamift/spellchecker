@@ -24,6 +24,7 @@ define('INVALID_CSRF_TOKEN',        'Invalid CSRF token.');
 define('INVALID_APIKEY',            'Invalid API key.');
 define('INVALID_REQUEST',           'Invalid request.');
 define('INVALID_PREFLIGHT',         'Invalid preflight request.');
+define('INVALID_ORIGIN',            'Invalid request origin.');
 
 define('DATABASE_ERROR',            'Some obscene database error occurred. Abandon ship!');
 
