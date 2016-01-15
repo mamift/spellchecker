@@ -59,10 +59,12 @@ class HomeController extends BaseController {
 		// return r401_json(results(array($_SERVER, $clientReferralOK, $apikeyOK), true, AUTHORISED_REFERRAL_FQDN)->all());
 
 		if (!$apikeyOK) {
-			return r401_json(results('INVALID_APIKEY', false, INVALID_APIKEY)->all());
+			$data = array('INVALID_APIKEY' => $apikeyOK);
+			return r401_json(results($data, false, INVALID_APIKEY)->all());
 		}
 
 		if (!$clientReferralOK) { // fail
+			// $data = array('INVALID_PREFLIGHT' => $clientReferralOK, 'DEBUG' => $_SERVER);
 			$data = array('INVALID_PREFLIGHT' => $clientReferralOK);
 			return r401_json(results($data, false, INVALID_PREFLIGHT)->all());
 		}
