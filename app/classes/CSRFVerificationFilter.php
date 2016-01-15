@@ -13,9 +13,9 @@ class CSRFVerificationFilter {
         } else {
 
             if ($this->verifyOriginReferral()) {
-                return true;
+                return;
             } else {
-                return r403_json(results('INVALID_PREFLIGHT', false, INVALID_PREFLIGHT)->all());
+                return r403_json(results('INVALID_ORIGIN', false, INVALID_ORIGIN)->all());
             }
         }
 
@@ -34,7 +34,7 @@ class CSRFVerificationFilter {
         // note this method returns a boolean
         $isReferrerAuth = is_substr_in_string($referrer, AUTHORISED_REFERRAL_FQDN);
 
-        // return ($isReferrerAuth || is_substr_in_string('http://localhost', 'localhost')); // if true, then OK to proceed!
-        return ($isReferrerAuth); // if true, then OK to proceed!
+        return ($isReferrerAuth || is_substr_in_string('http://localhost', 'localhost')); // if true, then OK to proceed!
+        // return ($isReferrerAuth); // if true, then OK to proceed!
     }
 }
