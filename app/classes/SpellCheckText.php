@@ -88,7 +88,7 @@ class SpellCheckText extends SpellCheckCommand
                 $candidateCorrections = $this->correct($w);
 
                 if (count($candidateCorrections) <= 1 && $candidateCorrections[0] == $w) {
-                    $this->unknownButNoCandidates[$w] = false;  
+                    $this->unknownButNoCandidates[] = $w;
                 } else
                     $this->unknownCandidates[$w] = $candidateCorrections;
             }
