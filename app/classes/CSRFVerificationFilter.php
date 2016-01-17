@@ -21,12 +21,12 @@ class CSRFVerificationFilter {
     {
         if (empty($_SERVER['HTTP_REFERER']) || !isset($_SERVER['HTTP_REFERER'])) return false;
 
-        $referrer = $_SERVER['HTTP_REFERER'];
+        $referrer = parse_url($_SERVER['HTTP_REFERER']);
 
         // note this method returns a boolean
-        $isReferrerAuth = is_substr_in_string($referrer, AUTHORISED_REFERRAL_FQDN);
+        $isReferrerAuth = is_substr_in_string($referrer['host'], AUTHORISED_REFERRAL_FQDN);
 
-        return ($isReferrerAuth || is_substr_in_string('http://localhost', $referrer)); // if true, then OK to proceed!
+        return ($isReferrerAuth || is_substr_in_string('http://localhost', $referrer['host'])); // if true, then OK to proceed!
         // return ($isReferrerAuth); // if true, then OK to proceed!
     }
 }

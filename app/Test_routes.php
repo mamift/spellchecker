@@ -82,3 +82,10 @@ Route::get('/test/3', function() {
     ));
     // return r200_json(array('is_string_in_haystack' => strstr('http://localhost', 'localhost')));
 });
+
+Route::get('/test/4', function(){
+    
+    $replace = parse_url($_SERVER['HTTP_REFERER']);
+
+    return r200_json($replace['host']);
+});
