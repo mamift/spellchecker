@@ -7,19 +7,11 @@ class CSRFVerificationFilter {
      */
     public function filter()
     {
-        if (Session::token() != Request::header('csrf')) {
-            // throw new Illuminate\Session\TokenMismatchException;
+        if (Session::token() != Request::header('csrf'))
             return r403_json(results('INVALID_CSRF_TOKEN', false, INVALID_CSRF_TOKEN)->all());
-        } else {
 
-            if ($this->verifyOriginReferral()) {
-                return;
-            } else {
-                return r403_json(results('INVALID_ORIGIN', false, INVALID_ORIGIN)->all());
-            }
-        }
-
-        return;
+        if ($this->verifyOriginReferral()) return;
+        else return r403_json(results('INVALID_ORIGIN', false, INVALID_ORIGIN)->all());
     }
 
     /**
@@ -34,7 +26,7 @@ class CSRFVerificationFilter {
         // note this method returns a boolean
         $isReferrerAuth = is_substr_in_string($referrer, AUTHORISED_REFERRAL_FQDN);
 
-        return ($isReferrerAuth || is_substr_in_string('http://localhost', 'localhost')); // if true, then OK to proceed!
+        return ($isReferrerAuth || is_substr_in_string('http://localhost', $referrer)); // if true, then OK to proceed!
         // return ($isReferrerAuth); // if true, then OK to proceed!
     }
 }
