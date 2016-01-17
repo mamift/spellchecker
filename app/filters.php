@@ -16,7 +16,7 @@ App::before(function($request)
     $exemptRoutes = Request::is('api/v1/preflight_handshake');
 
     // if not an exempt route, apply filters
-    if (!$exemptRoutes) {
+    if ($exemptRoutes === false) {
         Route::when('api/v1/*', 'csrf');
         Route::when('api/v1/*', 'apikeyverification');
     }
