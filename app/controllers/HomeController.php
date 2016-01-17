@@ -48,7 +48,8 @@ class HomeController extends BaseController {
 	 * NOTE: PHP sessions timeout after 24 mins of no communication. If that happens a new
 	 * preflight handshake must occur to gain access to the SpellChecker API.
 	 * 
-	 * @return [type] [description]
+	 * @return [JSON] [a JSON response, indicating if the attempt was successful and if 
+	 * not, why not]
 	 */
 	public function preflightHandshake()
 	{
@@ -58,16 +59,8 @@ class HomeController extends BaseController {
 
 		// return r401_json(results(array($_SERVER, $clientReferralOK, $apikeyOK), true, AUTHORISED_REFERRAL_FQDN)->all());
 
-		if (!$apikeyOK) {
-			$data = array('INVALID_APIKEY' => $apikeyOK);
-			return r401_json(results($data, false, INVALID_APIKEY)->all());
-		}
-
-		if (!$clientReferralOK) { // fail
-			// $data = array('INVALID_PREFLIGHT' => $clientReferralOK, 'DEBUG' => $_SERVER);
-			$data = array('INVALID_PREFLIGHT' => $clientReferralOK);
-			return r401_json(results($data, false, INVALID_PREFLIGHT)->all());
-		}
+		if (!$apikeyOK)         return r401_json(results('INVALID_APIKEY', false, INVALID_APIKEY)->all());
+		if (!$clientReferralOK) return r401_json(results('INVALID_PREFLIGHT', false, INVALID_PREFLIGHT)->all()); 
 
 		$csrfToken = Session::token();
 		$response = results($csrfToken, true, null);
