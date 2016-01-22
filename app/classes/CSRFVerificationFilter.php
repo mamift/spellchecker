@@ -8,10 +8,10 @@ class CSRFVerificationFilter {
     public function filter()
     {
         if (Session::token() != Request::header('csrf'))
-            return r403_json(results('INVALID_CSRF_TOKEN', false, INVALID_CSRF_TOKEN)->all());
+            return r403_json(results_all('INVALID_CSRF_TOKEN', false, INVALID_CSRF_TOKEN));
 
         if ($this->verifyOriginReferral()) return;
-        else return r403_json(results('INVALID_ORIGIN', false, INVALID_ORIGIN)->all());
+        else return r403_json(results_all('INVALID_ORIGIN', false, INVALID_ORIGIN));
     }
 
     /**

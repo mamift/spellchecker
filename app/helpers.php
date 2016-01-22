@@ -233,6 +233,21 @@ if (!function_exists('results')) {
     }
 }
 
+if (!function_exists('results_all')) {
+    /**
+     * Short hand for instantiating a new Results object and invoking the all() method 
+     * which gets all data properties set
+     * @param  array   $data    [the data]
+     * @param  boolean $success [does this Result represent a successful one?]
+     * @param  string  $message [the message]
+     * @return [Array]           [array of all public properties set on the Results object]
+     */
+    function results_all($data = array(), $success = false, $message = '(no message has been set)') {
+        $results = new Results($data, $success, $message);
+        return ($results->all());
+    }
+}
+
 if (!function_exists('exec_command')) {
     /**
      * Executes a command
