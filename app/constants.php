@@ -39,7 +39,7 @@ define('TBL_WORDS',                 'words');
 define('TBL_DICTIONARYENUM',        'dictionaries');
 define('TBL_USERS',                 'users');
 define('TBL_PASSWORDRESETS',        'passwordresets');
-define('TBL_SCSESSIONS',            'spellchecksessions');
+define('TBL_SCATTEMPTS',            'spellcheckattempts');
 
 define('DEFAULT_DATETIMEFORMAT',    "Y-m-d H:i:s");
 
