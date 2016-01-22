@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * This is a customised version of the CSRFVerificationFilter used by Laravel.
+ * The CSRF token is now included in the header and not as a hidden input value.
+ */
 class CSRFVerificationFilter {
     
     /**
