@@ -57,10 +57,10 @@ class HomeController extends BaseController {
 		$clientReferralOK = exec_delegate('CSRFVerificationFilter', 'verifyOriginReferral');
 		$apikeyOK = exec_delegate('APIKeyVerificationFilter', 'verifyAPIKey');
 
-		// return r401_json(results(array($_SERVER, $clientReferralOK, $apikeyOK), true, AUTHORISED_REFERRAL_FQDN)->all());
+		// return r401_json(results_all(array($_SERVER, $clientReferralOK, $apikeyOK), true, AUTHORISED_REFERRAL_FQDN));
 
-		if (!$apikeyOK)         return r401_json(results(array('INVALID_APIKEY' => $clientIP), false, INVALID_APIKEY)->all());
-		if (!$clientReferralOK) return r401_json(results(array('INVALID_PREFLIGHT' => $clientIP), false, INVALID_PREFLIGHT)->all()); 
+		if (!$apikeyOK)         return r401_json(results_all(array('INVALID_APIKEY' => array($clientIP)), false, INVALID_APIKEY));
+		if (!$clientReferralOK) return r401_json(results_all(array('INVALID_PREFLIGHT' => array($clientIP)), false, INVALID_PREFLIGHT)); 
 
 		$csrfToken = Session::token();
 		$response = results($csrfToken, true, null);

@@ -19,14 +19,16 @@ class CSRFVerificationFilter {
      */
     public function verifyOriginReferral()
     {
-        if (empty($_SERVER['HTTP_REFERER']) || !isset($_SERVER['HTTP_REFERER'])) return false;
+        if (!array_key_exists('HTTP_REFERER', $_SERVER)) return false;
 
         $referrer = parse_url($_SERVER['HTTP_REFERER']);
+        $index = 'host';
+        if (!array_key_exists($index, $referrer)) $index = 'path';
 
         // note this method returns a boolean
-        $isReferrerAuth = is_substr_in_string($referrer['host'], AUTHORISED_REFERRAL_FQDN);
+        $isReferrerAuth = is_substr_in_string($referrer[$index], AUTHORISED_REFERRAL_FQDN);
 
-        return ($isReferrerAuth || is_substr_in_string('http://localhost', $referrer['host'])); // if true, then OK to proceed!
+        return ($isReferrerAuth || is_substr_in_string('http://localhost', $referrer[$index])); // if true, then OK to proceed!
         // return ($isReferrerAuth); // if true, then OK to proceed!
     }
 }
