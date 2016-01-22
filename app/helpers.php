@@ -248,6 +248,18 @@ if (!function_exists('results_all')) {
     }
 }
 
+if (!function_exists('empty_or_notset')) {
+    
+    /**
+     * Shorthand for both empty() and !isset() tests
+     * @param  [any] $thingie [the thing to check]
+     * @return [boolean]          [if it satisfies either test]
+     */
+    function empty_or_notset($thingie) {
+        return (empty($thingie) || !isset($thingie));
+    }
+}
+
 if (!function_exists('exec_command')) {
     /**
      * Executes a command
