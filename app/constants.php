@@ -29,9 +29,10 @@ define('INVALID_ORIGIN',            'Invalid request origin.');
 define('DATABASE_ERROR',            'Some obscene database error occurred. Abandon ship!');
 
 define('DELEGATION_ERROR_NOCLASS',  'Class does not exist!');
-define('DELEGATION_ERROR_NOMETHOD', 'Method on the speicified class does not exist.');
-define('DELEGATION_ERROR_METHODER', 'Method on the speicified class failed to execute.');
-define('DELEGATION_NOT_A_COMMAND',  'Specified class is not of the App\\Commands\\ namespace.');
+define('DELEGATION_ERROR_NOMETHOD', 'Method on the specified class does not exist.');
+define('DELEGATION_ERROR_METHODER', 'Method on the specified class failed to execute.');
+define('DELEGATION_NOT_A_COMMAND',  'Specified class is not a command class.');
+define('DELEGATION_NOHANDLER_SET',  'No handler method set for this delegate.');
 
 define('TBL_APIKEYS',               'apikeys');
 define('TBL_ABBREVIATIONS',         'abbreviations');
@@ -45,6 +46,8 @@ define('DEFAULT_DATETIMEFORMAT',    "Y-m-d H:i:s");
 
 define('AUTHORISED_REFERRAL_FQDN',  'survey6.spss-asp.com');
 define('AUTHORISED_REFERRAL_SLDN',  'spss-asp.com');
+
+define('MAX_TEXT_LENGTH',           16384);
 
 /*
  * @var the relative path to the words.txt file (to be used to fill the database)

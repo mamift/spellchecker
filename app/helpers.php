@@ -367,3 +367,13 @@ if (!function_exists('is_substr_in_string')) {
         return ($comparison == 0);
     }
 }
+
+if (!function_exists('exception')) {
+
+    /**
+     * Shorthand function for throwing a new exception 
+     */
+    function exception($type, $message = '(no message has been set)' ) {
+        throw new Exception($type . ' :: ' . $message);
+    }
+}
