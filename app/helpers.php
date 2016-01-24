@@ -260,39 +260,57 @@ if (!function_exists('empty_or_notset')) {
     }
 }
 
+if (!function_exists('not_empty_or_isset')) {
+    
+    /**
+     * Shorthand for both !empty() and isset() tests
+     * @param  [any] $thingie [the thing to check]
+     * @return [boolean]          [if it satisfies either test]
+     */
+    function not_empty_or_isset($thingie) {
+        return (!empty($thingie) || isset($thingie));
+    }
+}
+
 if (!function_exists('exec_command')) {
     /**
      * Executes a command
-     * Can be invoked in either of two ways: exec_command('SpellCheckWord', $word);
+     * Can be invoked in either of two ways: exec_command('SpellCheckWord', $word, $custom_method_name);
      * The name of the class as a string plus constructor arguments,
      * Or: exec_command(new SpellCheckWord($word));
      * A new instance of the command class you wish to execute
      *
      * @param [Object] $command_class [the command to execute]
      * @param [mixed] $constructor_arguments [any arguments to pass to the constructor if invoking a command by its class name]
+     * @param  [mixed] $custom_method_name [invoke another public method, instead of handle()]
      * @return [Results object] [the results of the command]
      */
-    function exec_command($command_class, $constructor_arguments = NULL) {
+    function exec_command($command_class, $constructor_arguments = NULL, $custom_method_name = "") {
 
         $command_results = NULL;
 
-        $sm_sub_attempt_exec = function($com) use (&$command_results) {
-            if (method_exists($com, 'handle')) {
+        $sm_sub_attempt_exec = function($com) use (&$command_results, $custom_method_name) {
+
+            if (!method_exists($com, 'handle') && empty_or_notset($custom_method_name)) {
+                $command_results = results('DELEGATION_ERROR_METHODER', false, DELEGATION_ERROR_METHODER);
+                return;
+            }
+
+            if (not_empty_or_isset($custom_method_name) && !method_exists($com, 'handle')) {
+                $command_results = $com->$custom_method_name();
+            } else 
                 $command_results = $com->handle();
 
-                // if the command returns a Results object, then just exit the closure
-                if ($command_results instanceof Results && method_exists($command_results, 'all')) {
-                    return;
-                } else { // otherwise, return the command_results inside a new Results object
-                    $command_results = results($command_results, true);
+            // if the command returns a Results object, then just exit the closure
+            if ($command_results instanceof Results && method_exists($command_results, 'all')) {
+                return;
+            } else { // otherwise, return the command_results inside a new Results object
+                $command_results = results($command_results, true);
 
-                    // if the command object has a public message property, lets pass that onto the results object
-                    if (property_exists($com, 'message')) {
-                        $command_results->message = $com->message;
-                    }
+                // if the command object has a public message property, lets pass that onto the results object
+                if (property_exists($com, 'message')) {
+                    $command_results->message = $com->message;
                 }
-            } else {
-                $command_results = results('DELEGATION_ERROR_METHODER', false, DELEGATION_ERROR_METHODER);
             }
         };
 
@@ -325,13 +343,15 @@ if (!function_exists('exec_delegate')) {
      * 
      * @param  [class object] $delegate_class [object]
      */
-    function exec_delegate($delegate_class, $delegate_method) {
+    function exec_delegate($delegate_class, $delegate_method, $constructor_arguments = null) {
 
         if (class_exists($delegate_class)) {
 
             if (method_exists($delegate_class, $delegate_method)) {
-                $delegatee = new $delegate_class;
-                return $delegatee->$delegate_method();
+                $delegatee = new $delegate_class($constructor_arguments);
+                $return = $delegatee->$delegate_method();
+
+                return $return;
             } else {
                 return results('DELEGATION_ERROR_NOMETHOD', false, DELEGATION_ERROR_NOMETHOD);
             }
