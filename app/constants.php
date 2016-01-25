@@ -6,7 +6,7 @@
 define('COMMAND_NO_MESSAGE_SET',      '(no message has been set)');
 define('GENERIC_SUCCESS',             'Command succeeded.');
 define('GENERIC_FAIL',                'Command failed.');
-define('GENERIC_HELP',                'Please view the documentation on how to use this API.');
+define('GENERIC_HELP',                'Please view the documentation on how to use this API. Link should be in \'data\'.');
 define('GENERIC_404',                 'Invalid URL.');
 define('NEW_WORD_CREATED_SUCCESS',    'Success! New word created: ');
 define('NEW_WORD_ALREADY_EXISTS',     'Failure! Word already exists! ');
