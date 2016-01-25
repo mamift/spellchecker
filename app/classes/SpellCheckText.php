@@ -1,12 +1,7 @@
 <?php
 
-class SpellCheckText extends SpellCheckCommand
+class SpellCheckText extends IdentifyMispelltWords
 {
-    private $text;
-    private $uniqueWords;
-    private $knownWords;
-    private $unknownWords;
-
     /**
      * Create a new command instance.
      *
@@ -14,9 +9,7 @@ class SpellCheckText extends SpellCheckCommand
      */
     public function __construct($text)
     {
-        parent::__construct();
-
-        $this->text = $text;
+        parent::__construct($text);
     }
 
     /**
@@ -26,57 +19,22 @@ class SpellCheckText extends SpellCheckCommand
      */
     public function handle()
     {
-        $this->extractUniqueWords();
+        parent::handle();
 
-        $this->buildKnownWordsList();
+        if (empty_or_notset($this->unknownCandidates) || empty_or_notset($this->unknownButNoCandidates)) 
+            $this->buildCandidateWordsForUnknownWords();
 
-        $this->buildCandidateWordsForUnknownWords();
-
-        $_words = array(
-            'known' => $this->knownWords, 
-            'unknown' => $this->unknownWords,
-            'unknown_candidates' => $this->unknownCandidates,
-            'unknown_no_candidates' => $this->unknownButNoCandidates
-        );
+        $this->words['unknown_candidates'] = $this->unknownCandidates;
+        $this->words['unknown_no_candidates'] = $this->unknownButNoCandidates;
         
-        return $_words;
-    }
-
-    /**
-     * Extract all unique words from the text
-     */
-    private function extractUniqueWords()
-    {
-        $words = explode(" ", $this->text);
-
-        $this->uniqueWords = array_unique($words);
-
-        foreach ($this->uniqueWords as &$w) {
-            $w = strtolower($w);
-        }
-    }
-
-    /**
-     * Build known word list (these words are to be skipped over)
-     */
-    private function buildKnownWordsList()
-    {
-        $this->knownWords = array();
-        $this->unknownWords = array();
-
-        foreach ($this->uniqueWords as $w) {
-            if ($this->wordIsKnown($w)) $this->knownWords[] = $w;
-            else {
-                $this->unknownWords[] = $w;
-            }
-        }
+        return $this->words;
     }
 
     /**
      * Build a list of possible candidate corrections for each unknown word
      * Also list the words with no candidate (suggested) corrections
      */
-    private function buildCandidateWordsForUnknownWords()
+    public function buildCandidateWordsForUnknownWords()
     {
         if (count($this->unknownWords) == 0 || empty($this->unknownWords)) return false;
         
@@ -93,5 +51,7 @@ class SpellCheckText extends SpellCheckCommand
                     $this->unknownCandidates[$w] = $candidateCorrections;
             }
         }
+
+        return array('unknown_candidates' => $unknownCandidates, 'unknownButNoCandidates' => $unknownButNoCandidates);
     }
 }

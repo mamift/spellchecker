@@ -1,5 +1,11 @@
 <?php
 
+
+/**
+ * Identifiies only mispellt words in the text provided
+ */
+Route::post('/identify_mispellt_words', 'SpellCheckAPIController@identifyMispelltWords');
+
 Route::group(array('prefix' => 'spellcheck'), function() {
     /**
      * server_url/words

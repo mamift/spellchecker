@@ -26,12 +26,30 @@ class SpellCheckAPIController extends BaseController {
      */
     public function correctText() 
     {
-        $input = Input::all();
         $text = Input::get('text');
 
-        if (count($text) > 16384) return results(16384, false, GENERIC_CHLIMEXCEEDED);
+        if (count($text) > MAX_TEXT_LENGTH) return results(MAX_TEXT_LENGTH, false, GENERIC_CHLIMEXCEEDED);
 
         $response = exec_command(new SpellCheckText($text));
+
+        return $response->all();
+    }
+
+    /**
+     * Check a string of words and return an array of words that are misspelt
+     * 
+     * @return [string] [description]
+     */
+    public function identifyMispelltWords()
+    {
+        $text = Input::get('text');
+
+        if (count($text) > MAX_TEXT_LENGTH) return results(MAX_TEXT_LENGTH, false, GENERIC_CHLIMEXCEEDED);
+
+        $response = exec_command(new IdentifyMispelltWords($text), null, 'buildUnknownWordsList');
+
+        $response->success = count($response->data()['unknown']) > 0;
+        $response->message = $response->success ? SPELLCHECK_SUCCESS : SPELLCHECK_NO_UNKNOWN_WORDs;
 
         return $response->all();
     }
