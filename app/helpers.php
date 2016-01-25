@@ -410,3 +410,25 @@ if (!function_exists('exception')) {
         throw new Exception($type . ' :: ' . $message);
     }
 }
+
+if (!function_exists('get_server_url_prefix')) {
+
+    /**
+     * Shorthand function for automatically determining the server url prefix http:// or https://
+     */
+    function get_server_url_prefix() {
+        $protocol = 'http://'; 
+        $https_set = isset($_SERVER['HTTPS']);
+        if ($https_set) 
+            $https_svr_index = $https_set ? $_SERVER['HTTPS'] : false;
+
+        $https_is_on = ($https_set && ($https_svr_index == 'on' || $https_svr_index == 1));
+        // for use when the site is behind a reverse proxy
+        $https_proxy_fon = (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https');
+        
+        if ($https_set && ($https_is_on || $https_proxy_fon)) 
+            $protocol = 'https://';
+
+        return $protocol;
+    }
+}
