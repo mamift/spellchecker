@@ -1,18 +1,20 @@
 <?php
 
 
-/**
- * Identifiies only mispellt words in the text provided
- */
-Route::post('/identify_mispellt_words', 'SpellCheckAPIController@identifyMispelltWords');
 
 Route::group(array('prefix' => 'spellcheck'), function() {
+    /**
+     * Identifiies only mispellt words in the text provided
+     */
+    Route::post('/identify_mispellt_words', 'SpellCheckAPIController@identifyMispelltWords');
+
     /**
      * server_url/words
      */
     Route::get('/', function() {
         return r200_json(array(
-            'message' => GENERIC_HELP
+            'message' => GENERIC_HELP,
+            'data' => get_server_url_prefix() . $_SERVER['HTTP_HOST'] . '/documentation'
         ));
     });
 
