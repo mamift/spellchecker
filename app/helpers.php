@@ -296,8 +296,10 @@ if (!function_exists('exec_command')) {
                 return;
             }
 
-            if (not_empty_or_isset($custom_method_name) && !method_exists($com, 'handle')) {
-                $command_results = $com->$custom_method_name();
+            // invoke custom method instead of handle. must be public!
+            if (not_empty_or_isset($custom_method_name) && method_exists($com, $custom_method_name)) {
+                $m = $com->{$custom_method_name}();
+                $command_results = $m;
             } else 
                 $command_results = $com->handle();
 
@@ -331,6 +333,17 @@ if (!function_exists('exec_command')) {
         }
 
         return $command_results;
+    }
+}
+
+/**
+ * Shorthand for getting the all() array on a Results object when invoking exec_command()
+ * @return  [array] [command results]
+ */
+if (!function_exists('exec_command_all')) {
+    function exec_command_all($command_class, $constructor_arguments = NULL, $custom_method_name = "") {
+        $response = exec_command($command_class, $constructor_arguments, $custom_method_name);
+        return $response->all();
     }
 }
 
