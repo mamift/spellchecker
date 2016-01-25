@@ -2,7 +2,7 @@
 
 abstract class Command 
 {
-    protected $delegateMethodHandler = "";
+    public $delegateMethodHandler = "";
 
     /**
      * Sets the delegate method handler via a string
@@ -26,6 +26,7 @@ abstract class Command
 
         if (!method_exists($this, $this->delegateMethodHandler)) return exception('DELEGATION_ERROR_NOMETHOD', DELEGATION_ERROR_NOMETHOD);
 
-        return $this->delegateMethodHandler();
+        $m = $this->delegateMethodHandler;
+        return $m();
     }
 }
