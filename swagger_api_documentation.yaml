@@ -1,0 +1,138 @@
+
+swagger: '2.0'
+info:
+  title: bpanz_spellchecker
+  description: Spellchecker service; PHP 5.3.3 compatible and made to piggy-back on the current 2015 www.bpanz.com website.
+  version: "0.1.0"
+# the domain of the service
+host: www.bpanz.com
+# array of all schemes that your API supports
+schemes:
+  - http
+# will be prefixed to all paths
+basePath: /sc/public/api/v1/
+produces:
+  - application/json
+paths:
+  /preflight_handshake:
+    get:
+      summary: Preflight handshake for authorising clients with the spell checker.
+      description: |
+        This endpoint must be the first request made to by any client wishing to interface with the spell checker. The preflight handshake request from the client must first satisfy two conditions&colon; a valid apikey must be passed and the request be made from a valid referral URL.
+      parameters:
+        - name: apikey
+          in: header
+          description: A valid API key.
+          required: true
+          type: string
+          format: string
+      tags:
+        - spellchecker
+      responses:
+        200:
+          description: Returns a JSON object containing a session-based CSRF (cross-site request forgery) key in the 'data' property. 
+          schema:
+            $ref: '#/definitions/preflight_request_success'
+        401:
+          description: Returns a results object containing three properties - **data**, **success**, **message**.
+          schema:
+            $ref: '#/definitions/results_object'
+  /spellcheck/identify_mispellt_words:
+    post:
+      summary: Check a string of text and return all the words that are misspelt.
+      description: | 
+        This endpoint can be used to check which words in a string of text are misspelt. Pass the string of text to be checked in the a parameter named 'text' in the body of the request (form-data). This will return an array of words that were in 'text' that are not spelt correctly. 
+        
+        NOTE&colon; The response array will **not** contain duplicates.
+      parameters:
+        - name: text
+          in: formData
+          description: The text to check. Max size of 16384 chars.
+          required: true
+          type: string
+          format: string
+      tags:
+        - spellchecker
+      responses:
+        200:
+          description: Returns a results object containing three properties - **data**, **success**, **message**. The '**data**' property should contain the array of words identified in the text that are misspelt.
+          schema:
+            $ref: '#/definitions/results_object'
+  /spellcheck/:
+    get:
+      summary: Returns a link to the documentation for the API.
+      description: This default endpoint doesn't do anything meaningful yet; currently points you to the API documentation.
+      tags:
+        - spellchecker
+      responses:
+        200:
+          description: A message and link to the API documentation (link is in the **data** property).
+          schema:
+            type: object
+            properties:
+              data:
+                type: string
+                description: A link to the api documentation
+              message:
+                type: string
+                description: A message saying&colon; "Please view the documentation on how to use this API. Link should be in 'data'".
+#edit the rest below this line 
+  /me:
+    get:
+      summary: User Profile
+      description: The User Profile endpoint returns information about the Uber user that has authorized with the application.
+      tags:
+        - User
+      responses:
+        200:
+          description: A link to the API documentation.
+          schema:
+            type: object
+  /history:
+    get:
+      summary: User Activity
+      description: The User Activity endpoint returns data about a user's lifetime activity with Uber. The response will include pickup locations and times, dropoff locations and times, the distance of past requests, and information about which products were requested.<br><br>The history array in the response will have a maximum length based on the limit parameter. The response value count may exceed limit, therefore subsequent API requests may be necessary.
+      parameters:
+        - name: offset
+          in: query
+          type: integer
+          format: int32
+          description: Offset the list of returned results by this amount. Default is zero.
+        - name: limit
+          in: query
+          type: integer
+          format: int32
+          description: Number of items to retrieve. Default is 5, maximum is 100.
+      tags:
+        - User
+      responses:
+        200:
+          description: History information for the given user
+          schema:
+            $ref: '#/definitions/Activities'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  preflight_request_success:
+    type: object
+    properties:
+      data:
+        type: string
+        description: A 40 character long string of random alphanumeric characters.
+      success:
+        type: boolean
+        description: A boolean indicating the request status (false is bad, true is good)
+  results_object:
+    type: object
+    properties:
+      data:
+        type: string
+        description: Data sent in repsonse to the request. If successful the data usually is an array, even if it returns a single object or record.
+      success:
+        type: boolean
+        description: A boolean indicating the status of the request (false for failed or incorrect request, or true for successful request).
+      message:
+        type: string
+        description: An English written message indicating what went wrong or specifying the type of error that occured.
