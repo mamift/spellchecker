@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function() {
-    return r200_json(results(null, true, null)->all());
+    return r200_json(results_all(null, true, null));
 });
 
 /**
@@ -37,11 +37,6 @@ Route::group(array('prefix' => 'api/v1'), function() {
      * Incomplete
      */
     // require('WordsAPI_routes.php');
-
-    /**
-     * Returns a new token for CSRF (cross-site request forgery) validation for PUT,PATCH,POST requests
-     */
-    Route::get('/session', "HomeController@getSessionToken");
 
     /**
      * Generic error message
