@@ -3,13 +3,13 @@
 class IdentifyMispelltWords extends SpellCheckCommand
 {
     
-    private $text;
+    protected $text;
     public function getText() { return $this->text; }
-    private $uniqueWords;
+    protected $uniqueWords;
     public function getUniquewords() { return $this->uniqueWords; }
-    private $knownWords;
+    protected $knownWords;
     public function getKnownwords() { return $this->knownWords; }
-    private $unknownWords;
+    protected $unknownWords;
     public function getUnknownwords() { return $this->unknownWords; }
     
     /**

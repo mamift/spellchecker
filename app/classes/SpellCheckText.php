@@ -21,8 +21,7 @@ class SpellCheckText extends IdentifyMispelltWords
     {
         parent::handle();
 
-        if (empty_or_notset($this->unknownCandidates) || empty_or_notset($this->unknownButNoCandidates)) 
-            $this->buildCandidateWordsForUnknownWords();
+        $this->buildCandidateWordsForUnknownWords();
 
         $this->words['unknown_candidates'] = $this->unknownCandidates;
         $this->words['unknown_no_candidates'] = $this->unknownButNoCandidates;
@@ -52,6 +51,6 @@ class SpellCheckText extends IdentifyMispelltWords
             }
         }
 
-        return array('unknown_candidates' => $unknownCandidates, 'unknownButNoCandidates' => $unknownButNoCandidates);
+        return array('unknown_candidates' => $this->unknownCandidates, 'unknownButNoCandidates' => $this->unknownButNoCandidates);
     }
 }

@@ -36,9 +36,7 @@ class Results {
     private function updateCount() 
     {
         $c = count($this->data);
-        if ($c > 0) {
-            $this->count = $c;
-        }
+        $this->count = $c;
     }
 
     /**
@@ -48,7 +46,7 @@ class Results {
      */
     public function data($data = NULL)
     {
-        if (empty($data) || $data === NULL) {
+        if (!isset($data)) {
             if (empty($this->filteredData)) { // no filtered data set, return all
                 return $this->data;
             } else {
