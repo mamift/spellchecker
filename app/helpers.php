@@ -159,7 +159,7 @@ if (!function_exists('get_ip_address')) {
 
     /**
      * Ensures an ip address is both a valid IP and does not fall within
-     * a private network range. Used by get_ip_address() above
+     * a private network range. Used by get_ip_address() 
      */
     function validate_ip($ip)
     {
@@ -214,7 +214,7 @@ if (!function_exists('results_response')) {
      * @param  string  $message [the message]
      * @return [Results]           [Results object]
      */
-    function results_response($data = array(), $success = false, $message = '(no message has been set)') {
+    function results_response($data = array(), $success = false, $message = NULL) {
         $results = (new Results($data, $success, $message));
         return $results->all();
     }
@@ -228,7 +228,7 @@ if (!function_exists('results')) {
      * @param  string  $message [the message]
      * @return [Results]           [Results object]
      */
-    function results($data = array(), $success = false, $message = '(no message has been set)') {
+    function results($data = array(), $success = false, $message = NULL) {
         return (new Results($data, $success, $message));
     }
 }
@@ -242,7 +242,7 @@ if (!function_exists('results_all')) {
      * @param  string  $message [the message]
      * @return [Array]           [array of all public properties set on the Results object]
      */
-    function results_all($data = array(), $success = false, $message = '(no message has been set)') {
+    function results_all($data = array(), $success = false, $message = NULL) {
         $results = new Results($data, $success, $message);
         return ($results->all());
     }
