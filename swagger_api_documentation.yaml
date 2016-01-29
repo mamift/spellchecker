@@ -60,13 +60,13 @@ paths:
             $ref: '#/definitions/results_object'
   /spellcheck/:
     get:
-      summary: Returns a link to the documentation for the API.
+      summary: Does nothing except returns a link to the documentation for the API.
       description: This default endpoint doesn't do anything meaningful yet; currently points you to the API documentation.
       tags:
         - spellchecker
       responses:
         200:
-          description: A message and link to the API documentation (link is in the **data** property).
+          description: A message and link to the API documentation.
           schema:
             type: object
             properties:
@@ -76,44 +76,40 @@ paths:
               message:
                 type: string
                 description: A message saying&colon; "Please view the documentation on how to use this API. Link should be in 'data'".
-#edit the rest below this line 
-  /me:
+    post:
+      summary: Spellcheck an entire string
+      description: Similar to the **'identify_mispellt_words'** route, this endpoint can be used to check which words in a string of text are misspelt but it will also simultaneously provide some suggestions for each misspelt word. Pass the string of text to be checked in the parameter named 'text' in the body of the request (form-data). This will return an array of arrays&colon; each sub-array contains each word in 'text' that was misspelt, plus it's suggested corrections.
+      parameters:
+        - name: text
+          in: formData
+          type: string
+          format: string
+          description: The text to spellcheck.
+      tags:
+        - spellchecker
+      responses:
+        200:
+          description: History information for the given user
+          schema:
+            $ref: '#/definitions/results_object_spellcheck_text'
+  /spellcheck/{word}:
     get:
-      summary: User Profile
-      description: The User Profile endpoint returns information about the Uber user that has authorized with the application.
+      summary: Spell check a single word
+      parameters:
+        - name: word
+          in: path
+          description: The word to check
+          required: true
+          type: string
+          format: string
+      description: Spellchecks a single word; if the word is not known (i.e. not in the dictionary), then **data** on the response property will include an array of suggested corrections. If the word is known, then **success** will be false.
       tags:
         - User
       responses:
         200:
           description: A link to the API documentation.
           schema:
-            type: object
-  /history:
-    get:
-      summary: User Activity
-      description: The User Activity endpoint returns data about a user's lifetime activity with Uber. The response will include pickup locations and times, dropoff locations and times, the distance of past requests, and information about which products were requested.<br><br>The history array in the response will have a maximum length based on the limit parameter. The response value count may exceed limit, therefore subsequent API requests may be necessary.
-      parameters:
-        - name: offset
-          in: query
-          type: integer
-          format: int32
-          description: Offset the list of returned results by this amount. Default is zero.
-        - name: limit
-          in: query
-          type: integer
-          format: int32
-          description: Number of items to retrieve. Default is 5, maximum is 100.
-      tags:
-        - User
-      responses:
-        200:
-          description: History information for the given user
-          schema:
-            $ref: '#/definitions/Activities'
-        default:
-          description: Unexpected error
-          schema:
-            $ref: '#/definitions/Error'
+            $ref: '#/definitions/results_object'
 definitions:
   preflight_request_success:
     type: object
@@ -136,3 +132,30 @@ definitions:
       message:
         type: string
         description: An English written message indicating what went wrong or specifying the type of error that occured.
+  results_object_spellcheck_text:
+    type: object
+    properties:
+      data:
+        type: object
+        description: Data should contain four properties, each one representing a part of the spellcheck operation&colon; known, unknown, unknown_candidates, unknown_no_candidates
+        properties:
+          known: 
+            description: All the words present in 'text' that were in the dictionary.
+          unknown:
+            description: All words not present in the dictionary.
+          unknown_candidates:
+            description: All unknown words, with their respective suggestions.
+          unknown_no_candidates:
+            items:
+              $ref: '#/definitions/word'
+            type: array
+            description: All unknown words that had no suggestions.
+      success:
+        type: boolean
+        description: A boolean indicating the status of the request (false for failed or incorrect request, or true for successful request).
+      message:
+        type: string
+        description: An English written message indicating what went wrong or specifying the type of error that occured.
+  word:
+    type: string
+    description: A word
