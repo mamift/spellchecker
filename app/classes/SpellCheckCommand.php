@@ -59,7 +59,7 @@ abstract class SpellCheckCommand extends Command
     }
 
     /**
-     * Reads a text and extracts the list of words
+     * Reads a text and extracts the list of words; also converts it all to lowercase
      *
      * @param string $text
      * @return array The list of words
