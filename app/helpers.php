@@ -55,6 +55,17 @@ if (!function_exists('r401_json')) {
     }
 }
 
+if (!function_exists('r500_json')) {
+    /**
+     * Accepts a PHP array and returns JSON data with the 500 Server Error status code.
+     * @param  [array] $data [the PHP data to return]
+     * @return [JSON]       [JSON array]
+     */
+    function r500_json($data) {
+        return Response::json($data, 500, array(), JSON_NUMERIC_CHECK);
+    }
+}
+
 if (!function_exists('rb_r200_json')) {
     /**
      * Export Redbean data as JSON output, returning 200 HTTP status code.
@@ -407,7 +418,7 @@ if (!function_exists('exception')) {
      * Shorthand function for throwing a new exception 
      */
     function exception($type, $message = '(no message has been set)' ) {
-        throw new Exception($type . ' :: ' . $message);
+        throw new Exception($type . ' - ' . $message);
     }
 }
 
