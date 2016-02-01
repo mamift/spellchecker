@@ -12,6 +12,7 @@ define('NEW_WORD_CREATED_SUCCESS',    'Success! New word created: ');
 define('NEW_WORD_ALREADY_EXISTS',     'Failure! Word already exists! ');
 define('SPELLCHECK_NO_SUGGESTIONS',   'Failure! No suggestions.');
 define('SPELLCHECK_KNOWN_WORD',       'Failure! This word is already in the dictionary.');
+define('SPELLCHECK_NO_TEXT',          'Failure! Nothing to check.');
 define('SPELLCHECK_NO_UNKNOWN_WORDs', 'No unknown words');
 define('SPELLCHECK_NOALLCAPS',        'Spellchecker ignores all words in UPPERCASE.');
 define('SPELLCHECK_SUCCESS',          'Spellcheck complete.');
@@ -21,7 +22,7 @@ define('GENERIC_INVALIDID',           'Invalid ID.');
 define('GENERIC_NOCONTENT',           'There is no body content in the request.');
 define('GENERIC_CHLIMEXCEEDED',       'Character limit exceeded!');
 define('DICTIONARY_SERIALISED',       'Dictionary has been serialised.');
-define('INVALID_CSRF_TOKEN',          'Invalid CSRF token.');
+define('INVALID_CSRF_TOKEN',          'Invalid CSRF token. Did you forget to shake hands first?');
 define('INVALID_APIKEY',              'Invalid API key.');
 define('INVALID_REQUEST',             'Invalid request.');
 define('INVALID_PREFLIGHT',           'Invalid preflight request.');
@@ -49,6 +50,8 @@ define('AUTHORISED_REFERRAL_FQDN',    'survey6.spss-asp.com');
 define('AUTHORISED_REFERRAL_SLDN',    'spss-asp.com');
 
 define('MAX_TEXT_LENGTH',             16384);
+
+define('V1_API_PREFIX',              'api/v1');
 
 /*
  * @var the relative path to the words.txt file (to be used to fill the database)

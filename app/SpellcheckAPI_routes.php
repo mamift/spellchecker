@@ -4,12 +4,12 @@
 
 Route::group(array('prefix' => 'spellcheck'), function() {
     /**
-     * Identifiies only mispellt words in the text provided
+     * Identifies only misspelt words in the text provided
      */
     Route::post('/identify_mispellt_words', 'SpellCheckAPIController@identifyMispelltWords');
 
     /**
-     * server_url/words
+     * server_url/spellcheck
      */
     Route::get('/', function() {
         return r200_json(array(
@@ -25,8 +25,8 @@ Route::group(array('prefix' => 'spellcheck'), function() {
     Route::get('/{word}', "SpellCheckAPIController@correctWord");
 
     /**
-     * Spellcheck some text, up to a maximum of 16384 words (65535 characters whichever limit is hit first).
-     * server_url/spellecheck/
+     * Spellcheck some text, up to a maximum of 16384 words (or 65535 characters whichever limit is hit first).
+     * server_url/spellcheck/
      */
     Route::post('/', "SpellCheckAPIController@correctText");
 

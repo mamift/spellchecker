@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function() {
-    return r200_json(results_all(null, true, null));
+    return r200_json(results_all(null, true, 'If you can see this, then it is working'));
 });
 
 /**
@@ -30,7 +30,7 @@ Route::group(array('prefix' => 'api/v1'), function() {
     /**
      * For the spellchecker API
      */
-    require('SpellCheckAPI_routes.php');
+    require('SpellcheckAPI_routes.php');
 
     /**
      * For the Words API (edit words in the dictionary)
