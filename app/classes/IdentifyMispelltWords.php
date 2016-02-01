@@ -24,6 +24,8 @@ class IdentifyMispelltWords extends SpellCheckCommand
         if (!empty_or_notset($text)) {
             $this->text = $text;
             $this->extractUniqueWords();
+        } else {
+            exception('IdentifyMispelltWords', 'No text supplied for checking!');
         }
     }
 

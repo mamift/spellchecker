@@ -44,11 +44,14 @@ class SpellCheckAPIController extends BaseController {
     {
         $text = Input::get('text');
 
-        if (count($text) > MAX_TEXT_LENGTH) return results(MAX_TEXT_LENGTH, false, GENERIC_CHLIMEXCEEDED);
+        if (count($text) > MAX_TEXT_LENGTH) 
+            return results(MAX_TEXT_LENGTH, false, GENERIC_CHLIMEXCEEDED);
+        else if (empty_or_notset($text)) 
+            return r500_json(results_all('SPELLCHECK_NO_TEXT', false, SPELLCHECK_NO_TEXT));
 
         $response = exec_command(new IdentifyMispelltWords($text), null, 'buildUnknownWordsList');
 
-        $response->success = count($response->data()['unknown']) > 0;
+        $response->success = $response->count > 0;
         $response->message = $response->success ? SPELLCHECK_SUCCESS : SPELLCHECK_NO_UNKNOWN_WORDs;
 
         return $response->all();
