@@ -6,7 +6,7 @@ Route::group(array('prefix' => 'spellcheck'), function() {
     /**
      * Identifies only misspelt words in the text provided
      */
-    Route::post('/identify_mispellt_words', 'SpellCheckAPIController@identifyMispelltWords');
+    Route::post('/identify_misspelt_words', 'SpellCheckAPIController@identifyMispelltWords');
 
     /**
      * server_url/spellcheck
