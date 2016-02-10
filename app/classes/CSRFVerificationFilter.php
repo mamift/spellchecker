@@ -11,6 +11,7 @@ class CSRFVerificationFilter {
      */
     public function filter()
     {
+        // $invalid_csrf_token_response = array('should_be' => Session::token(), 'provided' => Request::header('csrf'));
         if (Session::token() != Request::header('csrf'))
             return r403_json(results_all('INVALID_CSRF_TOKEN', false, INVALID_CSRF_TOKEN));
 

@@ -13,7 +13,7 @@
 
 App::before(function($request)
 {
-    $exemptRoutes = Request::is('api/v1/preflight_handshake');
+    $exemptRoutes = Request::is('api/v1/preflight_handshake') || Request::is(ASSET_bpa_spellchecker_js);
 
     // if not an exempt route, apply filters
     if ($exemptRoutes === false) {
@@ -25,7 +25,7 @@ App::before(function($request)
 
 App::after(function($request, $response)
 {
-	//
+    $response->header('P3P', 'CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
 });
 
 /*
