@@ -121,7 +121,7 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
-		'Barryvdh\Debugbar\ServiceProvider',
+		// 'Barryvdh\Debugbar\ServiceProvider',
 		'Mamift\Redbean4Laravel4\Redbean4Laravel4ServiceProvider',
 		'Dark\SmartyView\SmartyViewServiceProvider'
 	),
@@ -190,7 +190,7 @@ return array(
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
 
-		'Debugbar'        => 'Barryvdh\Debugbar\Facade',
+		// 'Debugbar'        => 'Barryvdh\Debugbar\Facade',
 	),
 
 );
