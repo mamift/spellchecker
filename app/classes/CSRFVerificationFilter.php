@@ -11,9 +11,11 @@ class CSRFVerificationFilter {
      */
     public function filter()
     {
-        // $invalid_csrf_token_response = array('should_be' => Session::token(), 'provided' => Request::header('csrf'));
+        if (Request::method('OPTIONS')) return;
+
+        $invalid_csrf_token_response = array('should_be' => Session::token(), 'provided' => Request::header('csrf'));
         if (Session::token() != Request::header('csrf'))
-            return r403_json(results_all('INVALID_CSRF_TOKEN', false, INVALID_CSRF_TOKEN));
+            return r403_json(results_all($invalid_csrf_token_response, false, INVALID_CSRF_TOKEN));
 
         if ($this->verifyOriginReferral()) return;
         else return r403_json(results_all('INVALID_ORIGIN', false, INVALID_ORIGIN));

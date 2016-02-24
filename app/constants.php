@@ -3,6 +3,9 @@
  * Most of these constants should be self-explanatory.
  */
 
+define('NOT_HTTPS',                   'All requests must be over HTTPS!');
+define('CORSPREFLIGHT',               'CORSPREFLIGHT badness happened!');
+
 define('COMMAND_NO_MESSAGE_SET',      '(no message has been set)');
 define('GENERIC_SUCCESS',             'Command succeeded.');
 define('GENERIC_FAIL',                'Command failed.');

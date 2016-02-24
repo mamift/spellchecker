@@ -8,6 +8,8 @@ class APIKeyVerificationFilter {
      * @return [void or JSON] [void is returned if the request may pass through the filter]
      */
     public function filter() {
+        if (Request::method('OPTIONS')) return;
+
         if ($this->verifyAPIKey()) return;
         else {
             return r401_json(results('INVALID_APIKEY', false, INVALID_APIKEY)->all());

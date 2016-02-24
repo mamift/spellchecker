@@ -13,10 +13,13 @@
 
 App::before(function($request)
 {
-    $exemptRoutes = Request::is('api/v1/preflight_handshake') || Request::is(ASSET_bpa_spellchecker_js);
+    if (!Request::secure()) return r403_json(results_all('NOT_HTTPS', false, NOT_HTTPS));
+
+    $exemptRoutes = Request::is('api/v1/preflight_handshake');
 
     // if not an exempt route, apply filters
     if ($exemptRoutes === false) {
+        Route::when('api/v1/*', 'corspreflight');
         Route::when('api/v1/*', 'csrf');
         Route::when('api/v1/*', 'apikeyverification');
     }
@@ -26,6 +29,7 @@ App::before(function($request)
 App::after(function($request, $response)
 {
     $response->header('P3P', 'CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
+    $response->header('Cache-Control', 'max-age=3600, public');
 });
 
 /*
@@ -77,6 +81,8 @@ Route::filter('guest', function()
 |
 */
 
-Route::filter('csrf', 'CSRFVerificationFilter');
+Route::filter('corspreflight', 'CORSPreflight');
 
 Route::filter('apikeyverification', 'APIKeyVerificationFilter');
+
+Route::filter('csrf', 'CSRFVerificationFilter');

@@ -18,7 +18,7 @@ Route::get('/', function() {
 /**
  * Testing and development routes; remove in production push
  */
-require('Test_routes.php');
+// require('Test_routes.php');
 
 Route::group(array('prefix' => 'api/v1'), function() {
 
