@@ -15,10 +15,44 @@ Route::get('/', function() {
     return r200_json(results_all(null, true, 'If you can see this, then it is working'));
 });
 
+
+/**
+ * IE8 compatible endpoints
+ */
+Route::group(array('prefix' => 'api/vIE8'), function() {
+
+    /**
+     * Preflight handshake for first-time setup (as in, upon the initiaion of a new session)
+     */
+    Route::post('/preflight_handshake', 'HomeController@preflightHandshakeIE8');
+
+    /**
+     * For the spellchecker API
+     */
+    // require('SpellcheckAPI_IE8_routes.php');
+
+    /**
+     * For the Words API (edit words in the dictionary)
+     * Incomplete
+     */
+    // require('WordsAPI_routes.php');
+
+    /**
+     * Generic error message
+     */
+    Route::any('{any}', function() {
+        return r404_json(array(
+            'success' => 'false',
+            'message' => GENERIC_404
+        ));
+    })->where('any', '(.*)');
+});
+
+
 /**
  * Testing and development routes; remove in production push
  */
-// require('Test_routes.php');
+require('Test_routes.php');
 
 Route::group(array('prefix' => 'api/v1'), function() {
 
@@ -55,6 +89,6 @@ Route::group(array('prefix' => 'api/v1'), function() {
 Route::any('{any}', function() {
     return r404_json(array(
         'success' => 'false',
-        'message' => GENERIC_404
+        'message' => 'GENERIC_404'
     ));
 })->where('any', '(.*)');

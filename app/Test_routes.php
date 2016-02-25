@@ -18,6 +18,11 @@ Route::get('/index', function()
 Route::get('/test', function() {
     return app_path();
 });
+
+Route::get('/clear_debugbar_storage', function() {
+    
+});
+
 Route::get('/cwd', function() {
     return getcwd();
 });

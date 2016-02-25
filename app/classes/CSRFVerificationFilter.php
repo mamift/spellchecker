@@ -4,7 +4,7 @@
  * This is a customised version of the CSRFVerificationFilter used by Laravel.
  * The CSRF token is now included in the header and not as a hidden input value.
  */
-class CSRFVerificationFilter {
+class CSRFVerificationFilter extends CORSPreflight {
     
     /**
      * Verifies that a request has a CSRF token included in the header.
@@ -35,7 +35,7 @@ class CSRFVerificationFilter {
         // note this method returns a boolean
         $isReferrerAuth = is_substr_in_string($referrer[$index], AUTHORISED_REFERRAL_FQDN);
 
-        return ($isReferrerAuth || is_substr_in_string('http://localhost', $referrer[$index])); // if true, then OK to proceed!
+        return ($isReferrerAuth || is_substr_in_string('localhost', $referrer[$index])); // if true, then OK to proceed!
         // return ($isReferrerAuth); // if true, then OK to proceed!
     }
 }

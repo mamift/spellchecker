@@ -1,6 +1,6 @@
 <?php
 
-class APIKeyVerificationFilter {
+class APIKeyVerificationFilter extends CORSPreflight {
     
     /**
      * Filter requests with invalid API keys
@@ -27,6 +27,21 @@ class APIKeyVerificationFilter {
     public function verifyAPIKey() 
     {
         $apikey = Request::header('apikey');
+
+        return R::isAPIKeyValid($apikey);
+    }
+
+    /**
+     * Verifies if an API key in the request body is valid; 
+     * it's basically a wrapper for a R:: extension function.
+     *
+     * This is in it's own method so it can be delegated if need be.
+     * 
+     * @return [bool] [true if the API key is valid, false otherwise]
+     */
+    public function verifyAPIKeyIE8() 
+    {
+        $apikey = Input::get('apikey');
 
         return R::isAPIKeyValid($apikey);
     }

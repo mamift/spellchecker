@@ -13,16 +13,18 @@
 
 App::before(function($request)
 {
-    if (!Request::secure()) return r403_json(results_all('NOT_HTTPS', false, NOT_HTTPS));
+    if (!Request::secure() && strripos(!Request::root(), 'localhost') !== false) return r403_json(results_all(array('NOT_HTTPS' => Request::root()), false, NOT_HTTPS));
 
     $exemptRoutes = Request::is('api/v1/preflight_handshake');
 
     // if not an exempt route, apply filters
     if ($exemptRoutes === false) {
-        Route::when('api/v1/*', 'corspreflight');
+        // Route::when('api/v1/*', 'corspreflight');
         Route::when('api/v1/*', 'csrf');
         Route::when('api/v1/*', 'apikeyverification');
     }
+
+    Route::when('api/vIE8/*', 'corspreflight');
 });
 
 

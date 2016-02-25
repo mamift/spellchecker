@@ -67,4 +67,21 @@ class HomeController extends BaseController {
 		
 		return r200_json($response->all());
 	}
+
+	public function preflightHandshakeIE8()
+	{
+		$clientIP = get_ip_address();
+		$clientReferralOK = exec_delegate('CSRFVerificationFilter', 'verifyOriginReferral');
+		$apikeyOK = exec_delegate('APIKeyVerificationFilter', 'verifyAPIKeyIE8');
+
+		// return r401_json(results_all(array($_SERVER, $clientReferralOK, $apikeyOK), true, AUTHORISED_REFERRAL_FQDN));
+
+		if (!$apikeyOK)         return r401_json(results_all(array('INVALID_APIKEY' => array(Input::all())), false, INVALID_APIKEY));
+		if (!$clientReferralOK) return r401_json(results_all(array('INVALID_PREFLIGHT' => array($clientIP)), false, INVALID_PREFLIGHT)); 
+
+		$csrfToken = Session::token();
+		$response = results($csrfToken, true, null);
+		
+		return r200_json($response->all());
+	}
 }

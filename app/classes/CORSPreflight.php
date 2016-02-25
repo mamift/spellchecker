@@ -10,12 +10,14 @@ class CORSPreflight {
      */
     public function filter()
     {
-        $is_CORS_ok = $this->verifyCORSPreflight();
-        if ($is_CORS_ok === true) {
-            return;
-        } else {
-            return r403_json($is_CORS_ok);
-        }
+        return;
+        
+        // $is_CORS_ok = $this->verifyCORSPreflight();
+        // if ($is_CORS_ok === true) {
+            // return;
+        // } else {
+            // return r403_json($is_CORS_ok);
+        // }
     }
 
     public function verifyCORSPreflight()
@@ -36,5 +38,10 @@ class CORSPreflight {
                 // return 'bad';
             }
         }
+    }
+
+    public function isIE8XDRequest()
+    {
+        return;
     }
 }
