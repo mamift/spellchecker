@@ -7,13 +7,23 @@ class APIKeyVerificationFilter extends CORSPreflight {
      * 
      * @return [void or JSON] [void is returned if the request may pass through the filter]
      */
-    public function filter() {
-        if (Request::method('OPTIONS')) return;
-
+    public function filter() 
+    {
         if ($this->verifyAPIKey()) return;
-        else {
-            return r401_json(results('INVALID_APIKEY', false, INVALID_APIKEY)->all());
-        }
+        
+        return r401_json(results('INVALID_APIKEY', false, INVALID_APIKEY)->all());
+    }
+
+    /**
+     * IE8 compatible versoin of the filter() method
+     * 
+     * @return [void or JSON] [void is returned if the request may pass through the filter]
+     */
+    public function filterIE8() 
+    {
+        if ($this->verifyAPIKeyIE8()) return;
+
+        return r401_json(results('INVALID_APIKEY', false, INVALID_APIKEY)->all());
     }
 
     /**

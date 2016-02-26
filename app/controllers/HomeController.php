@@ -68,16 +68,21 @@ class HomeController extends BaseController {
 		return r200_json($response->all());
 	}
 
+	/**
+	 * IE8 compatible version of preflightHandshake()
+	 * 
+	 * @return [JSON] [response in JSON]
+	 */
 	public function preflightHandshakeIE8()
 	{
 		$clientIP = get_ip_address();
-		$clientReferralOK = exec_delegate('CSRFVerificationFilter', 'verifyOriginReferral');
+		$clientOriginOK = exec_delegate('CSRFVerificationFilter', 'verifyOriginReferralIE8');
 		$apikeyOK = exec_delegate('APIKeyVerificationFilter', 'verifyAPIKeyIE8');
 
-		// return r401_json(results_all(array($_SERVER, $clientReferralOK, $apikeyOK), true, AUTHORISED_REFERRAL_FQDN));
+		// return r401_json(results_all(array($_SERVER, '$clientOriginOK' => $clientOriginOK, '$apikeyOK' => $apikeyOK, '$parsedUrl' => parse_url($_SERVER['HTTP_ORIGIN'])), true, AUTHORISED_REFERRAL_FQDN));
 
-		if (!$apikeyOK)         return r401_json(results_all(array('INVALID_APIKEY' => array(Input::all())), false, INVALID_APIKEY));
-		if (!$clientReferralOK) return r401_json(results_all(array('INVALID_PREFLIGHT' => array($clientIP)), false, INVALID_PREFLIGHT)); 
+		if (!$apikeyOK)         return r401_json(results_all(array('INVALID_APIKEY' => array($apikeyOK)), false, INVALID_APIKEY));
+		if (!$clientOriginOK) return r401_json(results_all(array('INVALID_PREFLIGHT' => array($clientIP)), false, INVALID_PREFLIGHT)); 
 
 		$csrfToken = Session::token();
 		$response = results($csrfToken, true, null);
