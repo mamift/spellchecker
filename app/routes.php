@@ -12,9 +12,13 @@
 */
 
 Route::get('/', function() {
-    return r200_json(results_all(null, true, 'If you can see this, then it is working'));
+    return r200_json(array(
+            'success' => 'If you can see this, then it is working',
+            'data'    => get_server_url_prefix() . $_SERVER['HTTP_HOST'] . '/documentation',
+            'message' => GENERIC_HELP,
+        )
+    );
 });
-
 
 /**
  * IE8 compatible endpoints
@@ -29,7 +33,7 @@ Route::group(array('prefix' => 'api/vIE8'), function() {
     /**
      * For the spellchecker API
      */
-    // require('SpellcheckAPI_IE8_routes.php');
+    require('SpellcheckAPI_IE8_routes.php');
 
     /**
      * For the Words API (edit words in the dictionary)
@@ -48,12 +52,9 @@ Route::group(array('prefix' => 'api/vIE8'), function() {
     })->where('any', '(.*)');
 });
 
-
 /**
- * Testing and development routes; remove in production push
+ * The regular API endpoints for non-IE8,9 browsers
  */
-require('Test_routes.php');
-
 Route::group(array('prefix' => 'api/v1'), function() {
 
     /**
@@ -82,6 +83,13 @@ Route::group(array('prefix' => 'api/v1'), function() {
         ));
     })->where('any', '(.*)');
 });
+
+
+/**
+ * Testing and development routes; remove in production push
+ */
+// require('Test_routes.php');
+
 
 /**
  * Generic catch all route for unknown routes; this rule MUST always be LAST for it to work.
