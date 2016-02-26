@@ -15,16 +15,20 @@ App::before(function($request)
 {
     if (!Request::secure() && strripos(!Request::root(), 'localhost') !== false) return r403_json(results_all(array('NOT_HTTPS' => Request::root()), false, NOT_HTTPS));
 
-    $exemptRoutes = Request::is('api/v1/preflight_handshake');
+    $exemptRoutes = Request::is('api/v1/preflight_handshake') || Request::is('api/vIE8/preflight_handshake');
 
-    // if not an exempt route, apply filters
     if ($exemptRoutes === false) {
-        // Route::when('api/v1/*', 'corspreflight');
-        Route::when('api/v1/*', 'csrf');
+        // cors preflight chanel; firefox does it all the time appparently
+        if (Request::method() === 'OPTIONS') { 
+            Route::when('api/v1/*', 'corspreflight');
+        }
+        // if not an exempt route, apply filters
+        // Route::when('api/v1/*', 'csrf');
         Route::when('api/v1/*', 'apikeyverification');
-    }
 
-    Route::when('api/vIE8/*', 'corspreflight');
+        // Route::when('api/vIE8/*', 'csrf_ie8');
+        Route::when('api/vIE8/*', 'apikeyverification_ie8');
+    }
 });
 
 
@@ -86,5 +90,7 @@ Route::filter('guest', function()
 Route::filter('corspreflight', 'CORSPreflight');
 
 Route::filter('apikeyverification', 'APIKeyVerificationFilter');
+Route::filter('apikeyverification_ie8', 'APIKeyVerificationFilter@filterIE8');
 
 Route::filter('csrf', 'CSRFVerificationFilter');
+Route::filter('csrf_ie8', 'CSRFVerificationFilter@filterIE8');
