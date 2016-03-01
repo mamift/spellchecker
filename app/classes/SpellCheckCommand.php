@@ -59,7 +59,7 @@ abstract class SpellCheckCommand extends Command
     }
 
     /**
-     * Reads a text and extracts the list of words; also converts it all to lowercase
+     * Reads a text and extracts the list of words
      *
      * @param string $text
      * @return array The list of words
@@ -67,7 +67,8 @@ abstract class SpellCheckCommand extends Command
     protected function words($text) 
     {
         $matches = array();
-        preg_match_all("/[a-z]+/", strtolower($text), $matches);
+        // preg_match_all("/[a-z]+/", strtolower($text), $matches);
+        preg_match_all("/[a-z']+/i", $text, $matches);
         return $matches[0];
     }
 
@@ -75,19 +76,19 @@ abstract class SpellCheckCommand extends Command
      * Creates a table (dictionary) where the word is the key and the value is its relevance 
      * in the text (measured by the number of times it appears)
      *
-     * @param array $features
+     * @param array $words
      * @return array
      */
-    protected function train(array $features) 
+    protected function train(array $words) 
     {
         $model = array();
-        $count = count($features);
-        for($i = 0; $i < $count; $i++) {
-            $f = $features[$i];
-            if (!isset($model[$f]) || empty($model[$f])) {
-                $model[$f] = 1;
+        $count = count($words);
+        for ($i = 0; $i < $count; $i++) {
+            $word = $words[$i];
+            if (!isset($model[$word]) || empty($model[$word])) {
+                $model[$word] = 1;
             }
-            $model[$f] += 1;
+            $model[$word] += 1;
         }
         return $model;
     }
@@ -100,11 +101,11 @@ abstract class SpellCheckCommand extends Command
      */
     protected function edits1($word) 
     {
-        $alphabet = 'abcdefghijklmnopqrstuvwxyz';
+        $alphabet = "abcdefghijklmnopqrstuvwxyz\'ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $alphabet = str_split($alphabet);
         $n = strlen($word);
         $edits = array();
-        for ($i = 0 ; $i < $n; $i++) {
+        for ($i = 0; $i < $n; $i++) {
             $edits[] = substr($word, 0, $i) . substr($word, $i + 1); // deleting one char
             foreach ($alphabet as $c) {
                 $edits[] = substr($word, 0, $i) . $c . substr($word, $i + 1); // substituting one char
@@ -152,7 +153,8 @@ abstract class SpellCheckCommand extends Command
     {
         $known = array();
         foreach ($words as $w) {
-            if (array_key_exists($w, $this->NWORDS)) {
+            $lw = strtolower($w);
+            if (array_key_exists($lw, $this->NWORDS)) {
                 $known[] = $w;
             }
         }
@@ -168,9 +170,11 @@ abstract class SpellCheckCommand extends Command
     protected function wordIsKnown($word) 
     {
         if ($word == "" || empty($word)) return false;
-        // if (empty($this->NWORDS)) return false;
+        if (empty($this->NWORDS)) return false;
 
-        return (array_key_exists($word, $this->NWORDS));
+        $lw = strtolower($word);
+
+        return (array_key_exists($lw, $this->NWORDS));
     }
 
     /**
@@ -203,12 +207,13 @@ abstract class SpellCheckCommand extends Command
      */
     protected function correct($word) 
     {
+        $no_corrections = 'Sorry, no corrections!';
         if (!is_string($word)) return false;
 
         $word = trim($word);
         if (empty($word)) return false;
         
-        $word = strtolower($word);
+        // $word = strtolower($word);
         
         if (empty($this->NWORDS)) {
             

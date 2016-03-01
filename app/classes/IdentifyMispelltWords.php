@@ -52,15 +52,17 @@ class IdentifyMispelltWords extends SpellCheckCommand
      */
     public function extractUniqueWords()
     {
-        $words = explode(" ", $this->text);
+        // $words = explode(" ", $this->text);
+        $words = $this->words($this->text);
 
         $this->uniqueWords = array_unique($words);
 
-        foreach ($this->uniqueWords as &$w) {
-            $w = strtolower($w);
-        }
+        // foreach ($this->uniqueWords as &$w) {
+            // $w = strtolower($w);
+        // }
 
         return $this->uniqueWords;
+        // return $words;
     }
 
     /**
@@ -68,12 +70,14 @@ class IdentifyMispelltWords extends SpellCheckCommand
      */
     public function buildKnownWordsList()
     {
-        $this->knownWords = array();
+        $this->knownWords = $this->known($this->uniqueWords);
 
-        foreach ($this->uniqueWords as $w) {
-            if ($this->wordIsKnown($w)) $this->knownWords[] = $w;
-        }
+        // foreach ($this->uniqueWords as $w) {    
+        //     if ($this->wordIsKnown($w)) $this->knownWords[] = $w;
+        // }
 
+        // return $this->knownWords;
+        
         return $this->knownWords;
     }
 

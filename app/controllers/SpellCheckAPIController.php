@@ -50,6 +50,8 @@ class SpellCheckAPIController extends BaseController {
             return r500_json(results_all('SPELLCHECK_NO_TEXT', false, SPELLCHECK_NO_TEXT));
 
         $response = exec_command(new IdentifyMispelltWords($text), null, 'buildUnknownWordsList');
+        // $response = exec_command(new IdentifyMispelltWords($text), null, 'buildKnownWordsList');
+        // $response = exec_command(new IdentifyMispelltWords($text), null, 'extractUniqueWords');
 
         $response->success = $response->count > 0;
         $response->message = $response->success ? SPELLCHECK_SUCCESS : SPELLCHECK_NO_UNKNOWN_WORDs;

@@ -3,6 +3,7 @@
 class SerialiseDictionary extends SpellCheckCommand
 {
     private $forced;
+    private $debugInfo;
 
     /**
      * Create a new command instance.
@@ -25,7 +26,7 @@ class SerialiseDictionary extends SpellCheckCommand
     {
         $exceptionOccured = false;
         try {
-            $serialiseDictionaryResult = $this->serialiseDictionary($this->forced);
+            $this->debugInfo = $this->serialiseDictionary($this->forced);
         } catch (Exception $e) {
             $exceptionOccured = true;
         }
@@ -38,6 +39,6 @@ class SerialiseDictionary extends SpellCheckCommand
             $message = DICTIONARY_SERIALISED;
         }
 
-        return results(NULL, $success, $message);
+        return results($this->debugInfo, $success, $message);
     }
 }
