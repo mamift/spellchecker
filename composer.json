@@ -9,7 +9,8 @@
         "robclancy/laravel4-hashing": "1.0.x",
         "mamift/redbean4-laravel4":"dev-php533",
         "barryvdh/laravel-debugbar":"~1.8",
-        "dark/smarty-view": "dev-laravel-4.1"
+        "dark/smarty-view": "dev-laravel-4.1",
+        "mibe/feedwriter": "^1.0"
     },
     "autoload": {
         "classmap": [

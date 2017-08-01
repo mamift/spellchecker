@@ -10,7 +10,7 @@ host: www.bpanz.com
 schemes:
   - http
 # will be prefixed to all paths
-basePath: /sc/public/api/v1/
+basePath: /sc/public/api/v1
 produces:
   - application/json
 paths:

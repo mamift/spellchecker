@@ -5,11 +5,13 @@
 
 define('NOT_HTTPS',                   'All requests must be over HTTPS!');
 define('CORSPREFLIGHT',               'CORSPREFLIGHT badness happened!');
+define('CORSPREFLIGHT2',              'Don\'t invoke CORSPREFLIGHT filter on a non-OPTIONS request!');
+define('CORSPREFLIGHT_OK',            'You are OK!');
 
 define('COMMAND_NO_MESSAGE_SET',      '(no message has been set)');
 define('GENERIC_SUCCESS',             'Command succeeded.');
 define('GENERIC_FAIL',                'Command failed.');
-define('GENERIC_HELP',                'Please view the documentation on how to use this API. Link should be in \'data\' property.');
+define('GENERIC_HELP',                'Please view the documentation on how to use this API. Link should be inside this array.');
 define('GENERIC_404',                 'Invalid URL.');
 define('NEW_WORD_CREATED_SUCCESS',    'Success! New word created: ');
 define('NEW_WORD_ALREADY_EXISTS',     'Failure! Word already exists! ');
@@ -54,7 +56,7 @@ define('AUTHORISED_REFERRAL_SLDN',    'spss-asp.com');
 
 define('MAX_TEXT_LENGTH',             16384);
 
-define('V1_API_PREFIX',              'api/v1');
+define('V1_API_PREFIX',               'api/v1');
 
 /*
  * @var the relative path to the words.txt file (to be used to fill the database)

@@ -1,5 +1,12 @@
 <?php
 
+Route::get('/enchant', function() {
+    $r = enchant_broker_init();
+    $bprovides = enchant_broker_describe($r);
+    // echo "Current broker provides the following backend(s):\n";
+    return $bprovides;
+
+});
 
 Route::get('/index', function()
 {
@@ -28,7 +35,7 @@ Route::get('/cwd', function() {
 });
 
 Route::get('/phpinfo', function() {
-    Debugbar::disable();
+    // Debugbar::disable();
     phpinfo();
 });
 

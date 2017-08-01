@@ -443,3 +443,15 @@ if (!function_exists('get_server_url_prefix')) {
         return $protocol;
     }
 }
+
+if (!function_exists('array_key_exists_case_insensitive')) {
+
+    function array_key_exists_case_insensitive($key, $array) {
+        $array_copy = array_change_key_case($array, CASE_LOWER);
+        // for ($i = 0; $i < count($array); $i++) { 
+        //     $f = strripos($array[$i], $key);
+        //     if ($f !== false && $f > -1) return true;
+        // }
+        return array_key_exists($key, $array_copy);
+    }
+}

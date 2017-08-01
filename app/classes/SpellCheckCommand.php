@@ -101,7 +101,7 @@ abstract class SpellCheckCommand extends Command
      */
     protected function edits1($word) 
     {
-        $alphabet = "abcdefghijklmnopqrstuvwxyz\'ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $alphabet = "abcdefghijklmnopqrstuvwxyz\'";
         $alphabet = str_split($alphabet);
         $n = strlen($word);
         $edits = array();
@@ -241,14 +241,14 @@ abstract class SpellCheckCommand extends Command
             return array($word);
         }
 
-        $max = 0;
-        foreach ($candidates as $c) {
-            $value = $this->NWORDS[$c];
-            if ($value > $max) {
-                $max = $value;
-                $word = $c;
-            }
-        }
+        // $max = 0;
+        // foreach ($candidates as $c) {
+        //     $value = $this->NWORDS[$c];
+        //     if ($value > $max) {
+        //         $max = $value;
+        //         $word = $c;
+        //     }
+        // }
 
         return $candidates;
     }

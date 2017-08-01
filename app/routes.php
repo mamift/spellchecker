@@ -84,6 +84,7 @@ Route::group(array('prefix' => 'api/v1'), function() {
     })->where('any', '(.*)');
 });
 
+require('southern_cross_paper_survey_requests.php');
 
 /**
  * Testing and development routes; remove in production push
